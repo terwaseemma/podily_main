@@ -1,0 +1,134 @@
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.flex-row-space {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.main {
+    padding: 20px 5%;
+}
+
+.logo img {
+    width: 100px;
+}
+
+.signup-cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-height: 20px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.form-side {
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+    align-items: center;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-weight: 600;
+}
+
+.form-group input {
+    padding: 10px;
+    border: none;
+    background-color: rgb(187, 187, 187, 0.5);
+    border-radius: 5px;
+    width: 100%;
+}
+
+.form-group button {
+    padding: 10px;
+    border: none;
+    background-color: #0089F4;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.img-side {
+    display: none;
+    background-color: #0089F4;
+}
+
+.flex-row-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+}
+
+.icon {
+    padding: 8px 22px;
+    border-radius: 20px;
+    background-color: rgb(127, 255, 212, 0.5);
+}
+
+
+@media screen and (min-width: 768px) {
+    .signup-cont {
+        flex-direction: row;
+        align-items: flex-start;
+        max-height: 80vh;
+    }
+
+    .form-side {
+        width: 55%;
+    }
+
+    .img-side {
+        display: flex;
+        width: 45%;
+        background-color: #0089F4;
+        height: 50vh;
+        max-height: 100%;
+        padding: 20px;
+    }
+
+    .img-side img {
+        width: 100%;
+    }
+    
+}

@@ -1,0 +1,48 @@
+.ds {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.pathways {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.pathway-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1000px;
+}
+
+.pathway {
+    width: 100%;
+    max-width: 280px;
+}
+
+.pathway-info {
+    padding: 20px;
+    border: 1px solid #2e2d2d;
+    border-top: none;
+    align-items: flex-start;
+    height: 180px;
+}
+
+.pathway h2 {
+    font-size: 20px;
+    color: #2e2d2d;
+}
+
+.pathway img {
+    width: 100%;
+}
+
+.rating .iconn {
+    color: #0089F4;
+}

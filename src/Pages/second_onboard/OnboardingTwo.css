@@ -1,0 +1,35 @@
+.audience {
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.greybd {
+    border: 1px solid #d8d7d7;
+    color: #d8d7d7;
+}
+
+.light-blue-bd {
+    border: 1px solid #007bff;
+    color: #007bff;
+}
+
+.light-blue-bd label {
+    font-weight: 600;
+}
+
+.audience img {
+    width: 40px;
+    border-radius: 50%;
+}
+
+.btn-link {
+    color: #3c3c3d;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.audience label {
+    color: #3c3c3d;
+}

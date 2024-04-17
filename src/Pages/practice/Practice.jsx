@@ -191,7 +191,7 @@ const Practice = () => {
     ref.current.classList.toggle("none")
   }
   
- 
+
   const sendAudioToBackend = async (file) => {
     try {
       const formData = new FormData();
@@ -201,12 +201,13 @@ const Practice = () => {
       // formData.append('filename', "./src/assets/audio.wav");
 
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
+        mode: 'no-cors',
         method: "POST",
         headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer 7ddab5126d8e32face340f3be8c32ad900388b20'
         },
-
         body: {
           audio: formData,
           filename: "output.wav"
@@ -214,6 +215,7 @@ const Practice = () => {
       });
 
       console.log("response:", response);
+      // console.log("Body", response.body)
 
       if (response.ok) {
         console.log("Audio sent successfully");

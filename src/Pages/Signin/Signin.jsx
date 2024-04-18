@@ -4,20 +4,28 @@ import logo from '../../assets/logo.png';
 import formImg from '../../assets/form-img.png';
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
+function Signin() {
 
-const Signin = () => {
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
-
-    const [email, setEmail] = useState('');
+    // const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log( email, password)
-        navigate('/onboarding-one')
-    }
+        axios.post('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/login/', { username, password })
+            .then(res => {
+                localStorage.setItem('token', res.data.token);
+                console.log(username, password);
+                navigate('/onboarding-one');
+            })
+            .catch(error => {
+                console.error("Authentication error: ", error);
+            });
+    };
 
     return (
         <div className='flex-column full-width main'>
@@ -31,20 +39,20 @@ const Signin = () => {
                     <h2>
                         Begin Your Journey
                     </h2>
-                    <form className="auth-form" onSubmit={(e) => {handleSubmit()}}>
+                    <form className="auth-form" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                            <label htmlFor="username">Username</label>
+                            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}  required/>
+                            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         </div>
                         <div className="flex-row-space">
-                            <div className="flex-row">
+                            {/* <div className="flex-row">
                                 <input type="checkbox" name="remember-me" id="remember-me" required />
                                 <label htmlFor="remember-me">Remember me</label>
-                            </div>
+                            </div> */}
                             <div className="flex-row">
                                 <NavLink to="/forgot-password">Forgot Password?</NavLink>
                             </div>
@@ -73,7 +81,7 @@ const Signin = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Signin;

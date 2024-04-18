@@ -206,7 +206,7 @@ const Practice = () => {
         headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Authorization': 'Bearer 7ddab5126d8e32face340f3be8c32ad900388b20'
+      
         },
         body: {
           audio: formData,

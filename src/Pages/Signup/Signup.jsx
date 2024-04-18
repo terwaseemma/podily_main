@@ -4,6 +4,7 @@ import logo from '../../assets/logo.png';
 import formImg from '../../assets/form-img.png';
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 const Signup = () => {
@@ -12,13 +13,20 @@ const Signup = () => {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(firstName, lastName, email, password)
-        navigate('/onboarding-one')
+        axios.post('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/register/, ', { firstName, lastName, username, password })
+            .then(res => {
+                localStorage.setItem('token', res.data.token);
+                console.log(firstName, lastName, username, password)
+                navigate('/onboarding-one');
+            })
+            .catch(error => {
+                console.error("Authentication error: ", error);
+            });
     }
 
     return (
@@ -46,7 +54,7 @@ const Signup = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
-                            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>

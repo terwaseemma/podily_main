@@ -450,7 +450,7 @@ const Practice = () => {
                 </div>
               </div>
             </div>
-            <Action status={status} addAudioElement={addAudioElement} recorderControls={recorderControls} startRecording={startRecording} stopRecording={stopRecording} />
+            <Action status={status} downloadOnSavePress={true} addAudioElement={addAudioElement} recorderControls={recorderControls} startRecording={startRecording} stopRecording={stopRecording} />
             {
               status === "play" ? <button className="btn2" onClick={() => {sendAudioToBackend(recordingBlob)}}>Analyze</button> : ""
             }

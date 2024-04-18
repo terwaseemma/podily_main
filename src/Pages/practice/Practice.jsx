@@ -198,13 +198,18 @@ const Practice = () => {
       
       const audioBlob = new Blob([file], {type: 'audio/wav'});
       formData.append('audio', audioBlob, "output.wav");
+      console.log(file)
+      console.log(audioBlob)
+      console.log(formData)
       // formData.append('filename', "./src/assets/audio.wav");
 
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
         mode: 'no-cors',
         method: "POST",
         headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'X-CSRF-Token': csrfToken,
+        // 'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       
         },

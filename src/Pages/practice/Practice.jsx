@@ -81,6 +81,15 @@ const Practice = () => {
     container.appendChild(audio);
   };
   const [status, setStatus] = useState("start");
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    // Fetch token from localStorage when component mounts
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
   const startRecording = () => {
     console.log("Recording Started");
@@ -208,15 +217,11 @@ const Practice = () => {
         method: "POST",
         headers: {
         'Content-Type': 'multipart/form-data',
-        'X-CSRF-Token': csrfToken,
-        // 'Content-Type': 'application/json',
+        'X-CSRF-Token': token,
         'Access-Control-Allow-Origin': '*',
       
         },
-        body: {
-          audio: formData,
-          filename: "output.wav"
-        },
+        body: formData,
       });
 
       console.log("response:", response);

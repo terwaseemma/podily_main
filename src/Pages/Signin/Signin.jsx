@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './Signin.css';
 import logo from '../../assets/logo.png';
 import formImg from '../../assets/form-img.png';
@@ -7,24 +7,25 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Signin() {
-
     const navigate = useNavigate();
 
-    // const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        axios.post('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/login/', { username, password })
-            .then(res => {
-                localStorage.setItem('token', res.data.token);
-                console.log(username, password);
-                navigate('/onboarding-one');
-            })
-            .catch(error => {
-                console.error("Authentication error: ", error);
-            });
+        try {
+            const response = await axios.post(
+                'https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/login/',
+                { username, password }
+            );
+            // Assuming the token is returned directly from the API
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            navigate('/onboarding-one');
+        } catch (error) {
+            console.error("Authentication error: ", error);
+        }
     };
 
     return (
@@ -36,9 +37,7 @@ function Signin() {
             </div>
             <div className="signup-cont">
                 <div className="form-side">
-                    <h2>
-                        Begin Your Journey
-                    </h2>
+                    <h2>Begin Your Journey</h2>
                     <form className="auth-form" onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="username">Username</label>
@@ -48,28 +47,16 @@ function Signin() {
                             <label htmlFor="password">Password</label>
                             <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         </div>
-                        <div className="flex-row-space">
-                            {/* <div className="flex-row">
-                                <input type="checkbox" name="remember-me" id="remember-me" required />
-                                <label htmlFor="remember-me">Remember me</label>
-                            </div> */}
-                            <div className="flex-row">
-                                <NavLink to="/forgot-password">Forgot Password?</NavLink>
-                            </div>
+                        <div className="flex-row">
+                            <NavLink to="/forgot-password">Forgot Password?</NavLink>
                         </div>
                         <div className="form-group">
                             <button type="submit">Login</button>
                         </div>
                         <div className="flex-row-center">
-                            <div className="icon">
-                                <FaGoogle />
-                            </div>
-                            <div className="icon">
-                                <FaFacebook />
-                            </div>
-                            <div className="icon">
-                                <FaApple />
-                            </div>
+                            <div className="icon"><FaGoogle /></div>
+                            <div className="icon"><FaFacebook /></div>
+                            <div className="icon"><FaApple /></div>
                         </div>
                         <div className="flex-row-center">
                             <p>Don't have an account? <NavLink to="/signup">Signup</NavLink></p>

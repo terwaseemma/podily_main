@@ -220,7 +220,8 @@ const Practice = () => {
       });
   
       if (response.ok) {
-        console.log("Audio sent successfully");
+        const responseData = await response.json();
+        console.log("Server response:", responseData);
       } else {
         console.error("Failed to send audio");
       }

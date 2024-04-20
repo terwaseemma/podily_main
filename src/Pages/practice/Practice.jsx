@@ -214,7 +214,7 @@ const Practice = () => {
         method: "POST",
         headers: {
           'Authorization': `Token ${token}`,
-          'X-CSRF-Token': token,
+          // 'X-CSRF-Token': token,
         },
         body: formData,
       });

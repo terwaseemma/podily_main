@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./Practice.css";
 import Header from "../../components/d_header/Header";
 import topic from "../../assets/topic.png";
@@ -83,13 +83,13 @@ const Practice = () => {
   const [status, setStatus] = useState("start");
   const [token, setToken] = useState(localStorage.getItem('token'));
 
-  // useEffect(() => {
-  //   // Fetch token from localStorage when component mounts
-  //   const storedToken = localStorage.getItem('token');
-  //   if (storedToken) {
-  //     setToken(storedToken);
-  //   }
-  // }, []);
+  useEffect(() => {
+    // Fetch token from localStorage when component mounts
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
   const startRecording = () => {
     console.log("Recording Started");
@@ -204,28 +204,15 @@ const Practice = () => {
   const sendAudioToBackend = async (file) => {
     try {
       const formData = new FormData();
-      
-      const audioBlob = new Blob([file], {type: 'audio/wav'});
-      formData.append('audio', audioBlob, "output.wav");
-      console.log(file)
-      console.log(audioBlob)
-      console.log(formData)
-      // formData.append('filename', "./src/assets/audio.wav");
+      formData.append('audio', file, "output.wav");
 
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
-        mode: 'no-cors',
         method: "POST",
         headers: {
-        'Content-Type': 'multipart/form-data',
-        'X-CSRF-Token': token,
-        'Access-Control-Allow-Origin': '*',
-      
+          'X-CSRF-Token': token,
         },
         body: formData,
       });
-
-      console.log("response:", response);
-      // console.log("Body", response.body)
 
       if (response.ok) {
         console.log("Audio sent successfully");
@@ -235,7 +222,7 @@ const Practice = () => {
     } catch (error) {
       console.error("Error sending audio:", error);
     }
-    setStatus("analyzed")
+    setStatus("analyzed");
   };
 
   const navigate = useNavigate()

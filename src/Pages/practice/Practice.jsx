@@ -204,8 +204,12 @@ const Practice = () => {
   const sendAudioToBackend = async (file) => {
     try {
       const formData = new FormData();
-      formData.append('audio', file, "output.wav");
-
+      
+      // Check if 'file' is already a Blob
+      const audioBlob = file instanceof Blob ? file : new Blob([file], { type: 'audio/wav' });
+      
+      formData.append('audio', audioBlob, "output.wav");
+  
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
         method: "POST",
         headers: {
@@ -213,7 +217,7 @@ const Practice = () => {
         },
         body: formData,
       });
-
+  
       if (response.ok) {
         console.log("Audio sent successfully");
       } else {
@@ -231,7 +235,6 @@ const Practice = () => {
     navigate("/pathways")
   }
 
-  
 
   return (
     <div className="ds">

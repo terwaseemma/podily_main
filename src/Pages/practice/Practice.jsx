@@ -83,13 +83,13 @@ const Practice = () => {
   const [status, setStatus] = useState("start");
   const [token, setToken] = useState(localStorage.getItem('token'));
 
-  useEffect(() => {
-    // Fetch token from localStorage when component mounts
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Fetch token from localStorage when component mounts
+  //   const storedToken = localStorage.getItem('token');
+  //   if (storedToken) {
+  //     setToken(storedToken);
+  //   }
+  // }, []);
 
   const startRecording = () => {
     console.log("Recording Started");

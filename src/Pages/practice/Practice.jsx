@@ -213,6 +213,7 @@ const Practice = () => {
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
         method: "POST",
         headers: {
+          'Authorization': `Token ${token}`,
           'X-CSRF-Token': token,
         },
         body: formData,

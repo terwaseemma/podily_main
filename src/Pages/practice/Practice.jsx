@@ -6,13 +6,9 @@ import PracticeStage from "../../components/practicephases/PracticeStage";
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { BsSoundwave } from "react-icons/bs";
 import { FaMicrophone, FaArrowRight } from "react-icons/fa";
-import pathway1 from '../../assets/pathway1.png'
-import pathway2 from '../../assets/pathway2.png'
-import pathway3 from '../../assets/pathway3.png'
-import pathway4 from '../../assets/pathway4.png'
-import pathway5 from '../../assets/pathway5.png'
 import { useNavigate, useParams } from "react-router"
-
+import '../../data/results'
+import '../../data/pathways'
 
 
 const Action = ({ status, addAudioElement, recorderControls, startRecording, stopRecording }) => {
@@ -103,91 +99,11 @@ const Practice = () => {
   }
 
   
-  const pathways = [
-    {
-      id: 1,
-      title: "Student",
-      description: "Are you tired of struggling to finish your projects on time? We have the right solution for you...",
-      image: pathway1,
-      rating: 10
-    },
-    {
-      id: 2,
-      title: "Student",
-      description: "Are you tired of struggling to finish your projects on time? We have the right solution for you...",
-      image: pathway2,
-      rating: 10
-    },
-    {
-      id: 3,
-      title: "Student",
-      description: "Are you tired of struggling to finish your projects on time? We have the right solution for you...",
-      image: pathway3,
-      rating: 9
-    },
-    {
-      id: 4,
-      title: "Student",
-      description: "Are you tired of struggling to finish your projects on time? We have the right solution for you...",
-      image: pathway4,
-      rating: 8
-    },
-    {
-      id: 5,
-      title: "Student",
-      description: "Are you tired of struggling to finish your projects on time? We have the right solution for you...",
-      image: pathway5,
-      rating: 10
-    },
-  ]
 
-  const val = pathways.find((a) => a.id === parseInt(scriptId));
 
-  const results = [
-   {
-      name: "Confidence",
-      percentage: 50,
-      icon: "icon",
-      color: "lightcoral",
-      details: "Your confidence level was very good today, you have improved by 12% ........."
-    },
-    {
-      name: "Clarity",
-      percentage: 25,
-      icon: "icon",
-      color: "lightgreen",
-      details: "Your clarity level was very good today, you have improved by 12% ........."
-    },
-    {
-      name: "Content",
-      percentage: 25,
-      icon: "icon",
-      color: "lightpink",
-      details: "Your content level was very good today, you have improved by 12% ........."
-    },
-    {
-      name: "Tone",
-      percentage: 25,
-      icon: "icon",
-      color: "lightblue",
-      details: "Your tone was very good today, you have improved by 12% ........."
-    },
-    {
-      name: "Energy",
-      percentage: 50,
-      icon: "icon",
-      color: "lightcoral",
-      details: "Your energy was very good today, you have improved by 12% ........."
-    },
-    {
-      name: "Story_Telling",
-      percentage: 25,
-      icon: "icon",
-      color: "lightgreen",
-      details: "Your story telling was very good today, you have improved by 12% ........."
-    },
+  // const val = pathways.find((a) => a.id === parseInt(scriptId));
 
-  ]
+ 
 
   const ConfidenceRef = useRef(null)
   const ClarityRef = useRef(null)
@@ -222,6 +138,7 @@ const Practice = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Server response:", responseData);
+        setServerResponse(responseData);
       } else {
         console.error("Failed to send audio");
       }
@@ -237,6 +154,8 @@ const Practice = () => {
     navigate("/pathways")
   }
 
+  const [serverResponse, setServerResponse] = useState(null)
+
 
   return (
     <div className="ds">
@@ -246,7 +165,15 @@ const Practice = () => {
           {
             status === "analyzed"? <>
             <h3>Results</h3>
-            <div className="results">
+              <div className="result-card">
+              {serverResponse && serverResponse.latest_message ? (
+                <p>{serverResponse.latest_message.content}</p>
+              ) : (
+                <p>No data received yet</p>
+              )}
+                {/*display response data here*/}
+              </div>
+            {/* <div className="results">
 
               <>
               <div className="result" style={{ backgroundColor: results[0].color }} onClick={() => {toggledetails(ConfidenceRef)}}>
@@ -406,7 +333,7 @@ const Practice = () => {
                     </div>
                 </div>
               </>
-            </div>
+            </div> */}
             <div className="instructions">
              
               <button

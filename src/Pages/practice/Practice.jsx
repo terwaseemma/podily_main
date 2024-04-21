@@ -129,6 +129,7 @@ const Practice = () => {
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
         method: "POST",
         headers: {
+          'Content-Type': 'audio/wav',
           'Authorization': `Token ${token}`,
           // 'X-CSRF-Token': token,
         },

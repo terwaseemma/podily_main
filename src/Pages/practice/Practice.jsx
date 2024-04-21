@@ -135,7 +135,7 @@ const Practice = () => {
           'Authorization': `Token ${token}`,
           // Note: 'Content-Type' should NOT be set manually with FormData
         },
-        body: formData,
+        body: audioBlob,
       });
   
       if (response.ok) {

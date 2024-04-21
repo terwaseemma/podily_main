@@ -120,33 +120,39 @@ const Practice = () => {
   }
   
 
-  const convertToWav = async (audioBuffer) => {
+  const convertToWav = async (webmBlob) => {
     console.log("Starting conversion to WAV");
-    const wavData = await WavEncoder.encode(audioBuffer); // Encode the audio buffer to WAV
+  
+    // Example: Converting WebM Blob to WAV Blob
+    const webmData = await webmBlob.arrayBuffer(); // Get the binary data from the Blob
+    const wavData = await WavEncoder.encode(webmData); // Encode the binary data to WAV
     console.log("WAV data generated");
-    const wavBlob = new Blob([wavData], { type: 'audio/wav' }); // Create a Blob for WAV data
-    return wavBlob;
+  
+    // Create a new WAV Blob
+    const wavBlob = new Blob([wavData], { type: 'audio/wav' });
+  
+    return wavBlob; // Return the WAV Blob
   };
   
   const sendAudioToBackend = async (token) => {
     try {
-      // Get the audio data from recorder controls
-      const audioBuffer = recorderControls.recordedAudio;
+      // Get the WebM Blob from recorder controls
+      const webmBlob = recorderControls.recordedAudio;
   
-      // Check if the audio is valid
-      if (!audioBuffer) {
-        console.error("No audio recorded.");
+      // Validate if we have a valid audio Blob
+      if (!(webmBlob instanceof Blob)) {
+        console.error("No valid audio recorded.");
         return;
       }
   
-      // Convert the audio buffer to WAV
-      const wavBlob = await convertToWav(audioBuffer);
+      // Convert WebM to WAV
+      const wavBlob = await convertToWav(webmBlob);
   
-      // Create a FormData object to send to the backend
+      // Create FormData to send to the backend
       const formData = new FormData();
       formData.append("audio", wavBlob, "recording.wav");
   
-      // Send the audio to the backend
+      // Send the WAV data to the backend
       const response = await fetch(
         "https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/",
         {
@@ -160,7 +166,7 @@ const Practice = () => {
   
       if (response.ok) {
         const responseData = await response.json();
-        setServerResponse(responseData); // Store the server's response
+        setServerResponse(responseData); // Handle the server's response
       } else {
         console.error("Failed to send audio:", response.statusText);
       }
@@ -168,7 +174,7 @@ const Practice = () => {
       console.error("Error sending audio:", error);
     }
   
-    setStatus("analyzed"); // Update the status to indicate that analysis is complete
+    setStatus("analyzed"); // Indicate that analysis is complete
   };
 
   // const sendAudioToBackend = async (file) => {

@@ -116,42 +116,76 @@ const Practice = () => {
     ref.current.classList.toggle("none")
   }
   
-
-  const sendAudioToBackend = async (file) => {
+  const sendAudioToBackend = async (file, token) => {
     try {
-      const formData = new FormData();
-  
-      // Convert file to Blob if necessary
-      const audioBlob = file instanceof Blob
-        ? file
-        : new Blob([file], { type: 'audio/wav' });
-  
-      formData.append('audio', audioBlob, 'output.wav');
+        const formData = new FormData();
 
-      console.log('Audio format:', audioBlob.type);
-      console.log('FormData:', Array.from(formData.entries())); // Log to inspect the payload
-  
-      const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Token ${token}`,
-        },
-        body: formData,
-      });
-  
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log('Server response:', responseData);
-        setServerResponse(responseData);
-      } else {
-        console.error('Failed to send audio:', response.statusText);
-      }
+        const audioBlob = file instanceof Blob
+            ? file
+            : new Blob([file], { type: 'audio/wav' });
+
+        formData.append('audio', audioBlob, 'output.wav');
+
+        console.log('Audio format:', audioBlob.type);
+        console.log('FormData entries:', Array.from(formData.entries()));
+
+        const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${token}`,
+            },
+            body: formData,
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log('Server response:', responseData);
+            return responseData;
+        } else {
+            console.error('Failed to send audio:', response.statusText);
+            return null;
+        }
     } catch (error) {
-      console.error('Error sending audio:', error);
+        console.error('Error sending audio:', error);
+        return null;
     }
+};
+
+  // const sendAudioToBackend = async (file) => {
+  //   try {
+  //     const formData = new FormData();
   
-    setStatus('analyzed');
-  };
+  //     // Convert file to Blob if necessary
+  //     const audioBlob = file instanceof Blob
+  //       ? file
+  //       : new Blob([file], { type: 'audio/wav' });
+  
+  //     formData.append('audio', audioBlob, 'output.wav');
+
+  //     console.log('Audio format:', audioBlob.type);
+  //     console.log('FormData:', Array.from(formData.entries())); // Log to inspect the payload
+  
+  //     const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Authorization': `Token ${token}`,
+  //       },
+  //       body: formData,
+  //     });
+  
+  //     if (response.ok) {
+  //       const responseData = await response.json();
+  //       console.log('Server response:', responseData);
+  //       setServerResponse(responseData);
+  //     } else {
+  //       console.error('Failed to send audio:', response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error sending audio:', error);
+  //   }
+  
+  //   setStatus('analyzed');
+  // };
 
   const navigate = useNavigate()
 

@@ -9,6 +9,7 @@ import { FaMicrophone, FaArrowRight } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router"
 import '../../data/results'
 import '../../data/pathways'
+import WavEncoder from 'wav-encoder';
 
 
 const Action = ({ status, addAudioElement, recorderControls, startRecording, stopRecording }) => {
@@ -63,11 +64,22 @@ const Action = ({ status, addAudioElement, recorderControls, startRecording, sto
 
 const Practice = () => {
 
+  const recorderControls = useAudioRecorder();
   const scriptId = useParams().id
 
+  const [status, setStatus] = useState("start");
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
-  const recorderControls = useAudioRecorder()
-  const recordingBlob = useAudioRecorder()
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    } else {
+      console.error("No token found. Redirecting to login.");
+      navigate("/login"); // or other handling
+    }
+  }, []);
+
   const addAudioElement = (blob) => {
     const url = URL.createObjectURL(blob);
     const audio = document.createElement("audio");
@@ -76,24 +88,15 @@ const Practice = () => {
     const container = document.getElementById("act");
     container.appendChild(audio);
   };
-  const [status, setStatus] = useState("start");
-  const [token, setToken] = useState(localStorage.getItem('token'));
-
-  useEffect(() => {
-    // Fetch token from localStorage when component mounts
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
-
+  
   const startRecording = () => {
     console.log("Recording Started");
     setStatus("stop");
     recorderControls.startRecording();
   }
-
+  
   const stopRecording = () => {
+    console.log("Recording Stopped");
     setStatus("play");
     recorderControls.stopRecording();
   }
@@ -117,19 +120,18 @@ const Practice = () => {
   }
   
 
-  const sendAudioToBackend = async (file) => {
+  const convertToWav = async (audioBuffer) => {
+    const wavData = await WavEncoder.encode(audioBuffer); // Encode the audio buffer to WAV
+    const wavBlob = new Blob([wavData], { type: 'audio/wav' }); // Create a Blob for WAV data
+    return wavBlob;
+  };
+  
+  const sendAudioToBackend = async (token) => {
     try {
       const formData = new FormData();
-  
-      // Convert file to Blob if necessary
-      const audioBlob = file instanceof Blob
-        ? file
-        : new Blob([file], { type: 'audio/wav' });
-  
-      formData.append('audio', audioBlob, 'output.wav');
-
-      console.log('Audio format:', audioBlob.type);
-      console.log('FormData:', Array.from(formData.entries())); // Log to inspect the payload
+      const blob = recorderControls.recordedAudio;
+      
+      formData.append('audio', blob, 'output.wav');
   
       const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
         method: 'POST',
@@ -141,7 +143,6 @@ const Practice = () => {
   
       if (response.ok) {
         const responseData = await response.json();
-        console.log('Server response:', responseData);
         setServerResponse(responseData);
       } else {
         console.error('Failed to send audio:', response.statusText);
@@ -152,6 +153,42 @@ const Practice = () => {
   
     setStatus('analyzed');
   };
+
+  // const sendAudioToBackend = async (file) => {
+  //   try {
+  //     const formData = new FormData();
+  
+  //     // Convert file to Blob if necessary
+  //     const audioBlob = file instanceof Blob
+  //       ? file
+  //       : new Blob([file], { type: 'audio/wav' });
+  
+  //     formData.append('audio', audioBlob, 'output.wav');
+
+  //     console.log('Audio format:', audioBlob.type);
+  //     console.log('FormData:', Array.from(formData.entries())); // Log to inspect the payload
+  
+  //     const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Authorization': `Token ${token}`,
+  //       },
+  //       body: formData,
+  //     });
+  
+  //     if (response.ok) {
+  //       const responseData = await response.json();
+  //       console.log('Server response:', responseData);
+  //       setServerResponse(responseData);
+  //     } else {
+  //       console.error('Failed to send audio:', response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error sending audio:', error);
+  //   }
+  
+  //   setStatus('analyzed');
+  // };
 
   const navigate = useNavigate()
 
@@ -386,7 +423,7 @@ const Practice = () => {
             </div>
             <Action status={status} downloadOnSavePress={true} addAudioElement={addAudioElement} recorderControls={recorderControls} startRecording={startRecording} stopRecording={stopRecording} />
             {
-              status === "play" ? <button className="btn2" onClick={() => {sendAudioToBackend(recordingBlob)}}>Analyze</button> : ""
+              status === "play" ? <button className="btn2" onClick={() => {sendAudioToBackend(token)}}>Analyze</button> : ""
             }
             
             

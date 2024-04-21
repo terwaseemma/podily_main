@@ -121,32 +121,35 @@ const Practice = () => {
     try {
       const formData = new FormData();
       
-      // Check if 'file' is already a Blob
-      const audioBlob = file instanceof Blob ? file : new Blob([file], { type: 'audio/wav' });
+      // Ensure the audio is in WAV format
+      const audioBlob = file instanceof Blob && file.type === 'audio/wav'
+        ? file
+        : new Blob([file], { type: 'audio/wav' });
       
-      formData.append('audio', audioBlob, "output.wav");
+      // Add the audio file to FormData with a descriptive name
+      formData.append('audio', audioBlob, 'output.wav');
   
-      const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
-        method: "POST",
+      const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
+        method: 'POST',
         headers: {
-          'Content-Type': 'audio/wav',
           'Authorization': `Token ${token}`,
-          // 'X-CSRF-Token': token,
+          // Note: 'Content-Type' should NOT be set manually with FormData
         },
         body: formData,
       });
   
       if (response.ok) {
         const responseData = await response.json();
-        console.log("Server response:", responseData);
+        console.log('Server response:', responseData);
         setServerResponse(responseData);
       } else {
-        console.error("Failed to send audio");
+        console.error('Failed to send audio:', response.statusText);
       }
     } catch (error) {
-      console.error("Error sending audio:", error);
+      console.error('Error sending audio:', error);
     }
-    setStatus("analyzed");
+  
+    setStatus('analyzed');
   };
 
   const navigate = useNavigate()

@@ -116,7 +116,7 @@ const Practice = () => {
     ref.current.classList.toggle("none")
   }
   
-  const sendAudioToBackend = async (file, token) => {
+  const sendAudioToBackend = async (file) => {
     try {
         const formData = new FormData();
 

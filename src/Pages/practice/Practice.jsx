@@ -121,37 +121,54 @@ const Practice = () => {
   
 
   const convertToWav = async (audioBuffer) => {
+    console.log("Starting conversion to WAV");
     const wavData = await WavEncoder.encode(audioBuffer); // Encode the audio buffer to WAV
+    console.log("WAV data generated");
     const wavBlob = new Blob([wavData], { type: 'audio/wav' }); // Create a Blob for WAV data
     return wavBlob;
   };
   
   const sendAudioToBackend = async (token) => {
     try {
-      const formData = new FormData();
-      const blob = recorderControls.recordedAudio;
-      
-      formData.append('audio', blob, 'output.wav');
+      // Get the audio data from recorder controls
+      const audioBuffer = recorderControls.recordedAudio;
   
-      const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Token ${token}`,
-        },
-        body: formData,
-      });
+      // Check if the audio is valid
+      if (!audioBuffer) {
+        console.error("No audio recorded.");
+        return;
+      }
+  
+      // Convert the audio buffer to WAV
+      const wavBlob = await convertToWav(audioBuffer);
+  
+      // Create a FormData object to send to the backend
+      const formData = new FormData();
+      formData.append("audio", wavBlob, "recording.wav");
+  
+      // Send the audio to the backend
+      const response = await fetch(
+        "https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/",
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Token ${token}`,
+          },
+          body: formData,
+        }
+      );
   
       if (response.ok) {
         const responseData = await response.json();
-        setServerResponse(responseData);
+        setServerResponse(responseData); // Store the server's response
       } else {
-        console.error('Failed to send audio:', response.statusText);
+        console.error("Failed to send audio:", response.statusText);
       }
     } catch (error) {
-      console.error('Error sending audio:', error);
+      console.error("Error sending audio:", error);
     }
   
-    setStatus('analyzed');
+    setStatus("analyzed"); // Update the status to indicate that analysis is complete
   };
 
   // const sendAudioToBackend = async (file) => {

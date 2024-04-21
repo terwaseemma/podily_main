@@ -120,22 +120,23 @@ const Practice = () => {
   const sendAudioToBackend = async (file) => {
     try {
       const formData = new FormData();
-      
-      // Ensure the audio is in WAV format
-      const audioBlob = file instanceof Blob && file.type === 'audio/wav'
+  
+      // Convert file to Blob if necessary
+      const audioBlob = file instanceof Blob
         ? file
         : new Blob([file], { type: 'audio/wav' });
-      
-      // Add the audio file to FormData with a descriptive name
+  
       formData.append('audio', audioBlob, 'output.wav');
+
+      console.log('Audio format:', audioBlob.type);
+      console.log('FormData:', Array.from(formData.entries())); // Log to inspect the payload
   
       const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
         method: 'POST',
         headers: {
           'Authorization': `Token ${token}`,
-          // Note: 'Content-Type' should NOT be set manually with FormData
         },
-        body: audioBlob,
+        body: formData,
       });
   
       if (response.ok) {

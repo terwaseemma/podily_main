@@ -76,12 +76,12 @@ const Practice = () => {
       return;
     }
 
-    const url = URL.createObjectURL(blob);
-    const audio = document.createElement("audio");
-    audio.src = url;
-    audio.controls = true;
-    const container = document.getElementById("act");
-    container.appendChild(audio);
+    // const url = URL.createObjectURL(blob);
+    // const audio = document.createElement("audio");
+    // audio.src = url;
+    // audio.controls = true;
+    // const container = document.getElementById("act");
+    // container.append(audio);
   };
   
   const startRecording = () => {
@@ -211,6 +211,7 @@ const Practice = () => {
   const goToLibrary = () => {
     navigate("/pathways")
   }
+
 
 
 
@@ -436,18 +437,10 @@ const Practice = () => {
                 </div>
               </div>
             </div>
-            <Action
-                status={status}
-                addAudioElement={addAudioElement}
-                recorderControls={recorderControls}
-                startRecording={startRecording}
-                stopRecording={stopRecording}
-              />
-            {status === "play" ? (
-                <button className="btn2" onClick={sendAudioToBackend}>
-                  Analyze
-                </button>
-              ) : null}
+            <Action status={status} downloadOnSavePress={true} addAudioElement={addAudioElement} recorderControls={recorderControls} startRecording={startRecording} stopRecording={stopRecording} />
+            {
+              status === "play" ? <button className="btn2" onClick={() => {sendAudioToBackend(token)}}>Analyze</button> : ""
+            }
           </div>
           }
         

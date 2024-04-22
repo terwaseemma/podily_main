@@ -121,9 +121,7 @@ const Practice = () => {
     try {
       const formData = new FormData();
       
-      // Check if 'file' is already a Blob
-      const audioBlob = file instanceof Blob ? file : new Blob([file], { type: 'audio/wav' });
-      
+      const audioBlob = new Blob([file], { type: 'audio/wav' });
       formData.append('audio', audioBlob, "output.wav");
   
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {

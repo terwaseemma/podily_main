@@ -101,7 +101,7 @@ const Practice = () => {
   
 
 
-  const val = pathways.find((a) => a.id === parseInt(scriptId));
+  // const val = pathways.find((a) => a.id === parseInt(scriptId));
 
  
 

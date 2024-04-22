@@ -9,16 +9,23 @@ import { FaMicrophone, FaArrowRight } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router"
 import '../../data/results'
 import '../../data/pathways'
-import WavEncoder from 'wav-encoder';
 
 
 const Action = ({ status, addAudioElement, recorderControls, startRecording, stopRecording }) => {
+
+  const {
+    isRecording,
+    isPaused,
+    recordingTime,
+    mediaRecorder
+  } = useAudioRecorder();
+  
   if (status === "start") {
     return (
       <>
         <p>Click to Speak</p>
         <div className="action">
-          <div className="action-icon" onClick={startRecording}>
+          <div className="action-icon" onClick={(e) =>{ startRecording() }}>
             <FaMicrophone />
           </div>
         </div>
@@ -29,7 +36,7 @@ const Action = ({ status, addAudioElement, recorderControls, startRecording, sto
       <>
         <p>Click to Stop</p>
         <div className="action">
-          <div className="action-icon red" onClick={stopRecording}>
+          <div className="action-icon red" onClick={(e) => {stopRecording()}}>
             <BsSoundwave />
           </div>
         </div>
@@ -38,80 +45,61 @@ const Action = ({ status, addAudioElement, recorderControls, startRecording, sto
   } else {
     return (
       <>
-        <p>Click to Play Audio</p>
-        <div className="action">
+        <p>Click to play audio</p>
+        <div className="action" id="act">
           <div className="action-icon">
-            <AudioRecorder
-              onRecordingComplete={addAudioElement}
-              recorderControls={recorderControls}
-            />
+          <AudioRecorder 
+        onRecordingComplete={(blob) => addAudioElement(blob)}
+        recorderControls={recorderControls}
+      />
           </div>
         </div>
       </>
     );
+  
   }
 };
 
+
 const Practice = () => {
-  const recorderControls = useAudioRecorder();
-  const scriptId = useParams().id;
-  const navigate = useNavigate();
+
+  const scriptId = useParams().id
+
+
+  const recorderControls = useAudioRecorder()
+  const recordingBlob = useAudioRecorder()
+  const addAudioElement = (blob) => {
+    const url = URL.createObjectURL(blob);
+    const audio = document.createElement("audio");
+    audio.src = url;
+    audio.controls = true;
+    const container = document.getElementById("act");
+    container.appendChild(audio);
+  };
   const [status, setStatus] = useState("start");
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [serverResponse, setServerResponse] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (!storedToken) {
-      console.error("No token found. Redirecting to login.");
-      navigate("/login");
-    } else {
+    // Fetch token from localStorage when component mounts
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
       setToken(storedToken);
     }
-  }, [navigate]);
+  }, []);
 
-  const addAudioElement = (blob) => {
-    if (!blob) {
-      console.error("No valid audio recorded");
-      return;
-    }
-
-    // const url = URL.createObjectURL(blob);
-    // const audio = document.createElement("audio");
-    // audio.src = url;
-    // audio.controls = true;
-    // const container = document.getElementById("act");
-    // container.append(audio);
-  };
-  
   const startRecording = () => {
     console.log("Recording Started");
     setStatus("stop");
     recorderControls.startRecording();
-  };
+  }
 
   const stopRecording = () => {
-    console.log("Recording Stopped");
     setStatus("play");
     recorderControls.stopRecording();
-  };
+  }
 
-  const convertToWav = async (webmBlob) => {
-    if (!(webmBlob instanceof Blob)) {
-      console.error("Invalid Blob provided for WAV conversion");
-      return null;
-    }
+  
 
-    const webmData = await webmBlob.arrayBuffer(); // Get the binary data from the Blob
-    const wavData = await WavEncoder.encode(webmData); // Encode the binary data to WAV
-
-    if (!wavData) {
-      console.error("Conversion to WAV failed");
-      return null;
-    }
-
-    return new Blob([wavData], { type: "audio/wav" }); // Create the WAV Blob
-  };
 
   // const val = pathways.find((a) => a.id === parseInt(scriptId));
 
@@ -128,48 +116,40 @@ const Practice = () => {
     ref.current.classList.toggle("none")
   }
   
-  const sendAudioToBackend = async () => {
+  const sendAudioToBackend = async (file, token) => {
     try {
-      const webmBlob = recorderControls.recordedAudio;
+        const formData = new FormData();
 
-      if (!(webmBlob instanceof Blob)) {
-        console.error("No valid audio recorded.");
-        return;
-      }
+        const audioBlob = file instanceof Blob
+            ? file
+            : new Blob([file], { type: 'audio/wav' });
 
-      const wavBlob = await convertToWav(webmBlob);
+        formData.append('audio', audioBlob, 'output.wav');
 
-      if (!wavBlob) {
-        console.error("Conversion to WAV failed.");
-        return;
-      }
+        console.log('Audio format:', audioBlob.type);
+        console.log('FormData entries:', Array.from(formData.entries()));
 
-      const formData = new FormData();
-      formData.append("audio", wavBlob, "recording.wav");
+        const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${token}`,
+            },
+            body: formData,
+        });
 
-      const response = await fetch(
-        "https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/",
-        {
-          method: "POST",
-          headers: {
-            "Authorization": `Token ${token}`,
-          },
-          body: formData,
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log('Server response:', responseData);
+            return responseData;
+        } else {
+            console.error('Failed to send audio:', response.statusText);
+            return null;
         }
-      );
-
-      if (response.ok) {
-        const responseData = await response.json();
-        setServerResponse(responseData);
-      } else {
-        console.error("Failed to send audio:", response.statusText);
-      }
     } catch (error) {
-      console.error("Error sending audio:", error);
+        console.error('Error sending audio:', error);
+        return null;
     }
-
-    setStatus("analyzed");
-  };
+};
 
   // const sendAudioToBackend = async (file) => {
   //   try {
@@ -207,12 +187,13 @@ const Practice = () => {
   //   setStatus('analyzed');
   // };
 
+  const navigate = useNavigate()
 
   const goToLibrary = () => {
     navigate("/pathways")
   }
 
-
+  const [serverResponse, setServerResponse] = useState(null)
 
 
   return (
@@ -439,8 +420,10 @@ const Practice = () => {
             </div>
             <Action status={status} downloadOnSavePress={true} addAudioElement={addAudioElement} recorderControls={recorderControls} startRecording={startRecording} stopRecording={stopRecording} />
             {
-              status === "play" ? <button className="btn2" onClick={() => {sendAudioToBackend(token)}}>Analyze</button> : ""
+              status === "play" ? <button className="btn2" onClick={() => {sendAudioToBackend(recordingBlob)}}>Analyze</button> : ""
             }
+            
+            
           </div>
           }
         

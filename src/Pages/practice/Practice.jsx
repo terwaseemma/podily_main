@@ -101,7 +101,7 @@ const Practice = () => {
   
 
 
-  // const val = pathways.find((a) => a.id === parseInt(scriptId));
+  const val = pathways.find((a) => a.id === parseInt(scriptId));
 
  
 
@@ -120,39 +120,33 @@ const Practice = () => {
   const sendAudioToBackend = async (file) => {
     try {
       const formData = new FormData();
+      
+      // Check if 'file' is already a Blob
+      const audioBlob = file instanceof Blob ? file : new Blob([file], { type: 'audio/wav' });
+      
+      formData.append('audio', audioBlob, "output.wav");
   
-      // Convert file to Blob if necessary
-      const audioBlob = file instanceof Blob
-        ? file
-        : new Blob([file], { type: 'audio/wav' });
-  
-      formData.append('audio', audioBlob, 'output.wav');
-
-      console.log('Audio format:', audioBlob.type);
-      console.log('FormData:', Array.from(formData.entries())); // Log to inspect the payload
-  
-      const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
-        method: 'POST',
+      const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
+        method: "POST",
         headers: {
           'Authorization': `Token ${token}`,
+          // 'X-CSRF-Token': token,
         },
         body: formData,
       });
   
       if (response.ok) {
         const responseData = await response.json();
-        console.log('Server response:', responseData);
+        console.log("Server response:", responseData);
         setServerResponse(responseData);
       } else {
-        console.error('Failed to send audio:', response.statusText);
+        console.error("Failed to send audio");
       }
     } catch (error) {
-      console.error('Error sending audio:', error);
+      console.error("Error sending audio:", error);
     }
-  
-    setStatus('analyzed');
+    setStatus("analyzed");
   };
-  
 
   const navigate = useNavigate()
 

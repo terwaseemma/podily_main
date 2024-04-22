@@ -13,20 +13,12 @@ import WavEncoder from 'wav-encoder';
 
 
 const Action = ({ status, addAudioElement, recorderControls, startRecording, stopRecording }) => {
-
-  const {
-    isRecording,
-    isPaused,
-    recordingTime,
-    mediaRecorder
-  } = useAudioRecorder();
-  
   if (status === "start") {
     return (
       <>
         <p>Click to Speak</p>
         <div className="action">
-          <div className="action-icon" onClick={(e) =>{ startRecording() }}>
+          <div className="action-icon" onClick={startRecording}>
             <FaMicrophone />
           </div>
         </div>
@@ -37,7 +29,7 @@ const Action = ({ status, addAudioElement, recorderControls, startRecording, sto
       <>
         <p>Click to Stop</p>
         <div className="action">
-          <div className="action-icon red" onClick={(e) => {stopRecording()}}>
+          <div className="action-icon red" onClick={stopRecording}>
             <BsSoundwave />
           </div>
         </div>
@@ -46,41 +38,44 @@ const Action = ({ status, addAudioElement, recorderControls, startRecording, sto
   } else {
     return (
       <>
-        <p>Click to play audio</p>
-        <div className="action" id="act">
+        <p>Click to Play Audio</p>
+        <div className="action">
           <div className="action-icon">
-          <AudioRecorder 
-        onRecordingComplete={(blob) => addAudioElement(blob)}
-        recorderControls={recorderControls}
-      />
+            <AudioRecorder
+              onRecordingComplete={addAudioElement}
+              recorderControls={recorderControls}
+            />
           </div>
         </div>
       </>
     );
-  
   }
 };
 
-
 const Practice = () => {
-
   const recorderControls = useAudioRecorder();
-  const scriptId = useParams().id
-
+  const scriptId = useParams().id;
+  const navigate = useNavigate();
   const [status, setStatus] = useState("start");
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [serverResponse, setServerResponse] = useState(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-    } else {
+    const storedToken = localStorage.getItem("token");
+    if (!storedToken) {
       console.error("No token found. Redirecting to login.");
-      navigate("/login"); // or other handling
+      navigate("/login");
+    } else {
+      setToken(storedToken);
     }
-  }, []);
+  }, [navigate]);
 
   const addAudioElement = (blob) => {
+    if (!blob) {
+      console.error("No valid audio recorded");
+      return;
+    }
+
     const url = URL.createObjectURL(blob);
     const audio = document.createElement("audio");
     audio.src = url;
@@ -93,16 +88,30 @@ const Practice = () => {
     console.log("Recording Started");
     setStatus("stop");
     recorderControls.startRecording();
-  }
-  
+  };
+
   const stopRecording = () => {
     console.log("Recording Stopped");
     setStatus("play");
     recorderControls.stopRecording();
-  }
+  };
 
-  
+  const convertToWav = async (webmBlob) => {
+    if (!(webmBlob instanceof Blob)) {
+      console.error("Invalid Blob provided for WAV conversion");
+      return null;
+    }
 
+    const webmData = await webmBlob.arrayBuffer(); // Get the binary data from the Blob
+    const wavData = await WavEncoder.encode(webmData); // Encode the binary data to WAV
+
+    if (!wavData) {
+      console.error("Conversion to WAV failed");
+      return null;
+    }
+
+    return new Blob([wavData], { type: "audio/wav" }); // Create the WAV Blob
+  };
 
   // const val = pathways.find((a) => a.id === parseInt(scriptId));
 
@@ -119,40 +128,25 @@ const Practice = () => {
     ref.current.classList.toggle("none")
   }
   
-
-  const convertToWav = async (webmBlob) => {
-    console.log("Starting conversion to WAV");
-  
-    // Example: Converting WebM Blob to WAV Blob
-    const webmData = await webmBlob.arrayBuffer(); // Get the binary data from the Blob
-    const wavData = await WavEncoder.encode(webmData); // Encode the binary data to WAV
-    console.log("WAV data generated");
-  
-    // Create a new WAV Blob
-    const wavBlob = new Blob([wavData], { type: 'audio/wav' });
-  
-    return wavBlob; // Return the WAV Blob
-  };
-  
-  const sendAudioToBackend = async (token) => {
+  const sendAudioToBackend = async () => {
     try {
-      // Get the WebM Blob from recorder controls
       const webmBlob = recorderControls.recordedAudio;
-  
-      // Validate if we have a valid audio Blob
+
       if (!(webmBlob instanceof Blob)) {
         console.error("No valid audio recorded.");
         return;
       }
-  
-      // Convert WebM to WAV
+
       const wavBlob = await convertToWav(webmBlob);
-  
-      // Create FormData to send to the backend
+
+      if (!wavBlob) {
+        console.error("Conversion to WAV failed.");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("audio", wavBlob, "recording.wav");
-  
-      // Send the WAV data to the backend
+
       const response = await fetch(
         "https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/",
         {
@@ -163,18 +157,18 @@ const Practice = () => {
           body: formData,
         }
       );
-  
+
       if (response.ok) {
         const responseData = await response.json();
-        setServerResponse(responseData); // Handle the server's response
+        setServerResponse(responseData);
       } else {
         console.error("Failed to send audio:", response.statusText);
       }
     } catch (error) {
       console.error("Error sending audio:", error);
     }
-  
-    setStatus("analyzed"); // Indicate that analysis is complete
+
+    setStatus("analyzed");
   };
 
   // const sendAudioToBackend = async (file) => {
@@ -213,13 +207,11 @@ const Practice = () => {
   //   setStatus('analyzed');
   // };
 
-  const navigate = useNavigate()
 
   const goToLibrary = () => {
     navigate("/pathways")
   }
 
-  const [serverResponse, setServerResponse] = useState(null)
 
 
   return (
@@ -444,12 +436,18 @@ const Practice = () => {
                 </div>
               </div>
             </div>
-            <Action status={status} downloadOnSavePress={true} addAudioElement={addAudioElement} recorderControls={recorderControls} startRecording={startRecording} stopRecording={stopRecording} />
-            {
-              status === "play" ? <button className="btn2" onClick={() => {sendAudioToBackend(token)}}>Analyze</button> : ""
-            }
-            
-            
+            <Action
+                status={status}
+                addAudioElement={addAudioElement}
+                recorderControls={recorderControls}
+                startRecording={startRecording}
+                stopRecording={stopRecording}
+              />
+            {status === "play" ? (
+                <button className="btn2" onClick={sendAudioToBackend}>
+                  Analyze
+                </button>
+              ) : null}
           </div>
           }
         

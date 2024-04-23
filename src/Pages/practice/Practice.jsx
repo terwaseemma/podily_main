@@ -9,6 +9,7 @@ import { FaMicrophone, FaArrowRight } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router"
 import '../../data/results'
 import '../../data/pathways'
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 
 
 const Action = ({ status, addAudioElement, recorderControls, startRecording, stopRecording }) => {
@@ -117,24 +118,41 @@ const Practice = () => {
   }
   
 
-  const sendAudioToBackend = async (file) => {
+  const convertToWav = async (blob) => {
+    const ffmpeg = createFFmpeg({ log: true });
+    await ffmpeg.load();
+  
+    // Read the blob and write it to FFmpeg's filesystem
+    const data = await fetchFile(blob);
+    ffmpeg.FS('writeFile', 'audio.webm', data);
+  
+    // Convert the webm file to wav
+    await ffmpeg.run('-i', 'audio.webm', 'output.wav');
+  
+    // Read the converted file as a Blob
+    const wavData = ffmpeg.FS('readFile', 'output.wav');
+    const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
+  
+    return wavBlob;
+  };
+
+  const sendAudioToBackend = async (blob) => {
     try {
       const formData = new FormData();
       
-      // Check if 'file' is already a Blob
-      const audioBlob = file instanceof Blob ? file : new Blob([file], { type: 'audio/wav' });
-      
-      formData.append('audio', audioBlob, "output.wav");
+      // Convert to wav using the utility function
+      const wavBlob = await convertToWav(blob);
   
-      const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
+      formData.append('audio', wavBlob, 'output.wav');
+    
+      const response = await fetch("https://your-backend-endpoint/api/upload-audio/", {
         method: "POST",
         headers: {
           'Authorization': `Token ${token}`,
-          // 'X-CSRF-Token': token,
         },
         body: formData,
       });
-  
+    
       if (response.ok) {
         const responseData = await response.json();
         console.log("Server response:", responseData);
@@ -145,8 +163,9 @@ const Practice = () => {
     } catch (error) {
       console.error("Error sending audio:", error);
     }
+  
     setStatus("analyzed");
-  };
+    };
 
   const navigate = useNavigate()
 

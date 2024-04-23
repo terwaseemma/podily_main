@@ -6,10 +6,11 @@ import PracticeStage from "../../components/practicephases/PracticeStage";
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { BsSoundwave } from "react-icons/bs";
 import { FaMicrophone, FaArrowRight } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router"
+import { useNavigate, useParams } from "react-router";
 import '../../data/results'
-import '../../data/pathways'
-import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+import '../../data/pathways';
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile } from '@ffmpeg/util';
 
 
 const Action = ({ status, addAudioElement, recorderControls, startRecording, stopRecording }) => {
@@ -117,19 +118,21 @@ const Practice = () => {
     ref.current.classList.toggle("none")
   }
   
+  const ffmpeg = new FFmpeg({ log: true }); // Initialize FFmpeg as a new instance
 
   const convertToWav = async (blob) => {
-    const ffmpeg = createFFmpeg({ log: true });
-    await ffmpeg.load();
+    try {
+      await ffmpeg.load(); // Load FFmpeg and check for errors
+    } catch (error) {
+      console.error("Error loading FFmpeg:", error);
+      return; // Exit if there's an error
+    }
   
-    // Read the blob and write it to FFmpeg's filesystem
     const data = await fetchFile(blob);
     ffmpeg.FS('writeFile', 'audio.webm', data);
   
-    // Convert the webm file to wav
     await ffmpeg.run('-i', 'audio.webm', 'output.wav');
   
-    // Read the converted file as a Blob
     const wavData = ffmpeg.FS('readFile', 'output.wav');
     const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
   
@@ -145,7 +148,7 @@ const Practice = () => {
   
       formData.append('audio', wavBlob, 'output.wav');
     
-      const response = await fetch("https://your-backend-endpoint/api/upload-audio/", {
+      const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
         method: "POST",
         headers: {
           'Authorization': `Token ${token}`,

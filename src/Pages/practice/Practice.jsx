@@ -121,20 +121,22 @@ const Practice = () => {
   const ffmpeg = new FFmpeg({ log: true }); // Initialize FFmpeg as a new instance
 
   const convertToWav = async (blob) => {
-    await ffmpeg.load(); // Ensure FFmpeg is loaded before use
+    try {
+      await ffmpeg.load(); // Load FFmpeg and check for errors
+    } catch (error) {
+      console.error("Error loading FFmpeg:", error);
+      return; // Exit if there's an error
+    }
   
-    // Fetch the blob and write it to FFmpeg's virtual file system
     const data = await fetchFile(blob);
     ffmpeg.FS('writeFile', 'audio.webm', data);
   
-    // Run the command to convert webm to wav
     await ffmpeg.run('-i', 'audio.webm', 'output.wav');
   
-    // Read the converted file and return it as a Blob
     const wavData = ffmpeg.FS('readFile', 'output.wav');
     const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
   
-    return wavBlob; // Return the converted WAV blob
+    return wavBlob;
   };
 
   const sendAudioToBackend = async (blob) => {
@@ -146,7 +148,7 @@ const Practice = () => {
   
       formData.append('audio', wavBlob, 'output.wav');
     
-      const response = await fetch("https://your-backend-endpoint/api/upload-audio/", {
+      const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
         method: "POST",
         headers: {
           'Authorization': `Token ${token}`,

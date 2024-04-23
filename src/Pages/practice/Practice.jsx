@@ -6,10 +6,11 @@ import PracticeStage from "../../components/practicephases/PracticeStage";
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { BsSoundwave } from "react-icons/bs";
 import { FaMicrophone, FaArrowRight } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router"
+import { useNavigate, useParams } from "react-router";
 import '../../data/results'
-import '../../data/pathways'
-import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+import '../../data/pathways';
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile } from '@ffmpeg/util';
 
 
 const Action = ({ status, addAudioElement, recorderControls, startRecording, stopRecording }) => {
@@ -117,23 +118,23 @@ const Practice = () => {
     ref.current.classList.toggle("none")
   }
   
+  const ffmpeg = new FFmpeg({ log: true }); // Initialize FFmpeg as a new instance
 
   const convertToWav = async (blob) => {
-    const ffmpeg = createFFmpeg({ log: true });
-    await ffmpeg.load();
+    await ffmpeg.load(); // Ensure FFmpeg is loaded before use
   
-    // Read the blob and write it to FFmpeg's filesystem
+    // Fetch the blob and write it to FFmpeg's virtual file system
     const data = await fetchFile(blob);
     ffmpeg.FS('writeFile', 'audio.webm', data);
   
-    // Convert the webm file to wav
+    // Run the command to convert webm to wav
     await ffmpeg.run('-i', 'audio.webm', 'output.wav');
   
-    // Read the converted file as a Blob
+    // Read the converted file and return it as a Blob
     const wavData = ffmpeg.FS('readFile', 'output.wav');
     const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
   
-    return wavBlob;
+    return wavBlob; // Return the converted WAV blob
   };
 
   const sendAudioToBackend = async (blob) => {

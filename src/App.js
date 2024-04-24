@@ -7,6 +7,7 @@ import OnboardingOne from './Pages/first_onboard/OnboardingOne';
 import OnboardingTwo from './Pages/second_onboard/OnboardingTwo';
 import Pathways from './Pages/pathways/Pathways';
 import Practice from './Pages/practice/Practice';
+import Record from './components/new_recorder.jsx';
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
         <Route path="/onboarding-one" element={<OnboardingOne />} />
         <Route path="/onboarding-two" element={<OnboardingTwo />} />
         <Route path="/pathways" element={<Pathways />} />
-        <Route path="/practice/" element={<Practice />} />
+        <Route path="/practice" element={<Practice />} />
+        <Route path="/recorder" element={<Record />} />
       </Routes>
     </Router>
   );

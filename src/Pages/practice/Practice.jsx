@@ -6,11 +6,9 @@ import PracticeStage from "../../components/practicephases/PracticeStage";
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { BsSoundwave } from "react-icons/bs";
 import { FaMicrophone, FaArrowRight } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router"
 import '../../data/results'
-import '../../data/pathways';
-import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { fetchFile } from '@ffmpeg/util';
+import '../../data/pathways'
 
 
 const Action = ({ status, addAudioElement, recorderControls, startRecording, stopRecording }) => {
@@ -118,44 +116,23 @@ const Practice = () => {
     ref.current.classList.toggle("none")
   }
   
-  const ffmpeg = new FFmpeg({ log: true }); // Initialize FFmpeg as a new instance
 
-  const convertToWav = async (blob) => {
-    try {
-      await ffmpeg.load(); // Load FFmpeg and check for errors
-    } catch (error) {
-      console.error("Error loading FFmpeg:", error);
-      return; // Exit if there's an error
-    }
-  
-    const data = await fetchFile(blob);
-    ffmpeg.FS('writeFile', 'audio.webm', data);
-  
-    await ffmpeg.run('-i', 'audio.webm', 'output.wav');
-  
-    const wavData = ffmpeg.FS('readFile', 'output.wav');
-    const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
-  
-    return wavBlob;
-  };
-
-  const sendAudioToBackend = async (blob) => {
+  const sendAudioToBackend = async (file) => {
     try {
       const formData = new FormData();
       
-      // Convert to wav using the utility function
-      const wavBlob = await convertToWav(blob);
+      const audioBlob = new Blob([file], { type: 'audio/wav' });
+      formData.append('audio', audioBlob, "output.wav");
   
-      formData.append('audio', wavBlob, 'output.wav');
-    
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
         method: "POST",
         headers: {
           'Authorization': `Token ${token}`,
+
         },
         body: formData,
       });
-    
+  
       if (response.ok) {
         const responseData = await response.json();
         console.log("Server response:", responseData);
@@ -166,9 +143,8 @@ const Practice = () => {
     } catch (error) {
       console.error("Error sending audio:", error);
     }
-  
     setStatus("analyzed");
-    };
+  };
 
   const navigate = useNavigate()
 

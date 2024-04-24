@@ -1,6 +1,8 @@
 import React from "react";
 import { WavRecorder } from "webm-to-wav-converter";
 
+const [token, setToken] = useState(localStorage.getItem('token'));
+
 function Record() {
   const ref = React.useRef();
   const [audioData, setAudioData] = React.useState(null);
@@ -10,32 +12,39 @@ function Record() {
     ref.current = new WavRecorder();
   }, []);
 
+  useEffect(() => {
+    // Fetch token from localStorage when component mounts
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
+
   const sendAudioToServer = async (file) => {
-    const formData = new FormData();
-    formData.append("audio", new Blob([audioData], { type: "audio/wav" }), "audio.wav");
-
-    const authToken = "7ddab5126d8e32face340f3be8c32ad900388b20";
-
-     await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
-    mode: "no-cors",
-    method: "POST",
-    body: formData,
-    headers: {
-        Authorization: `Token ${authToken}`,
-      },
-    })
-      .then(response => {
-        if (response.ok) {
-          console.log("Audio sent successfully");
-        } else {
-          console.error("Failed to send audio");
-        }
-      })
-      .catch(error => {
-        console.error("Error sending audio:", error);
+    try {
+      const formData = new FormData();
+      formData.append("audio", new Blob([audioData], { type: "audio/wav" }), "audio.wav");
+  
+      const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
+        mode: "no-cors",
+        method: "POST",
+        body: formData,
+        headers: {
+          'Authorization': `Token ${token}`,
+        },
       });
+  
+      if (response.ok) {
+        console.log("Audio sent successfully");
+      } else {
+        console.error("Failed to send audio");
+      }
+    } catch (error) {
+      console.error("Error sending audio:", error);
+    }
   };
-
+  
   return (
     <div className="App">
       <header className="App-header">

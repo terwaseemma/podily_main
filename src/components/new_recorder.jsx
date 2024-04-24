@@ -17,9 +17,10 @@ function Record() {
     const authToken = "7ddab5126d8e32face340f3be8c32ad900388b20";
 
      await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
-      method: "POST",
-      body: formData,
-      headers: {
+    mode: "no-cors",
+    method: "POST",
+    body: formData,
+    headers: {
         Authorization: `Token ${authToken}`,
       },
     })

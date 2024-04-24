@@ -10,13 +10,13 @@ function Record() {
     ref.current = new WavRecorder();
   }, []);
 
-  const sendAudioToServer = () => {
+  const sendAudioToServer = async (file) => {
     const formData = new FormData();
     formData.append("audio", new Blob([audioData], { type: "audio/wav" }), "audio.wav");
 
     const authToken = "7ddab5126d8e32face340f3be8c32ad900388b20";
 
-    fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
+     await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
       method: "POST",
       body: formData,
       headers: {

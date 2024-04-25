@@ -17,9 +17,9 @@ function Record() {
         return;
     }
     const filename = generateUUID() + ".wav"
-    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+    const audioBlob = new Blob(audioUrl, { type: 'audio/wav' });
     const formData = new FormData();
-    formData.append('audio', audioUrl, filename);
+    formData.append('audio', audioBlob, filename);
     formData.append('filename', filename);
 
     fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
@@ -102,7 +102,7 @@ function Record() {
         </button> */}
         <br />
         <br />
-        <button onClick={()=>sendRecording(ref.current)}>Send to API</button>
+        <button onClick={()=>sendRecording(ref.current?.__data)}>Send to API</button>
       </header>
     </div>
   );

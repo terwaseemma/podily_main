@@ -11,6 +11,7 @@ function Record() {
   }, []);
 
   function sendRecording(audioUrl) {
+    const token = localStorage.getItem("token");
     if (!audioUrl) {
         console.error('Aucun enregistrement audio disponible pour envoyer');
         return;
@@ -23,6 +24,9 @@ function Record() {
 
     fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
         method: 'POST',
+        headers: {
+            'Authorization': `Token ${token}`, // Add authorization header with token
+          },
         body: formData
     })
     .then(response => {

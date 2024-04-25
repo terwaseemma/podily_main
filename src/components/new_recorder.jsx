@@ -23,12 +23,15 @@ function Record() {
 
 
   const sendAudioToServer = async (file) => {
+    if (!token) {
+        console.error("Missing authorization token. Please login to proceed.");
+        return;
+      }
     try {
       const formData = new FormData();
       formData.append("audio", new Blob([audioData], { type: "audio/wav" }), "audio.wav");
   
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
-        mode: "no-cors",
         method: "POST",
         body: formData,
         headers: {

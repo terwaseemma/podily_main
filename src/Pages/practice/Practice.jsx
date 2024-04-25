@@ -9,6 +9,7 @@ import { FaMicrophone, FaArrowRight } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router"
 import '../../data/results'
 import '../../data/pathways'
+import { WavRecorder } from "webm-to-wav-converter";
 
 
 const Action = ({ status, addAudioElement, recorderControls, startRecording, stopRecording }) => {

@@ -9,8 +9,8 @@ function Record() {
     ref.current = new WavRecorder();
   }, []);
 
-  const sendAudioToAPI = async () => {
-    const blob = await ref.current.exportWAV(); // Get the audio blob
+  const sendAudioToAPI = async (audio) => {
+    // const blob = await ref.current.getWaveBlob(); // Get the audio blob
     const token = localStorage.getItem("token"); // Get token from localStorage
 
     if (!token) {
@@ -19,7 +19,7 @@ function Record() {
     }
 
     const formData = new FormData();
-    formData.append("audio", blob);
+    formData.append("audio", audio);
 
     try {
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
@@ -51,15 +51,15 @@ function Record() {
         <button onClick={() => ref.current.stop()}>Stop</button>
         <br />
         <br />
-        <button onClick={() => ref.current.download()}>Download 16 bit</button>
+        <button onClick={() => {ref.current.download(); console.log(ref.current.__data);}}>Download 16 bit</button>
         <br />
         <br />
-        <button onClick={() => ref.current.download("MyWAVFile", true)}>
+        {/* <button onClick={() => ref.current.download("MyWAVFile", true)}>
           Download 32 bit
-        </button>
+        </button> */}
         <br />
         <br />
-        <button onClick={sendAudioToAPI}>Send to API</button>
+        <button onClick={()=>sendAudioToAPI(ref.current?.__data)}>Send to API</button>
       </header>
     </div>
   );

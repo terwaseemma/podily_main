@@ -102,7 +102,7 @@ function Record() {
         </button> */}
         <br />
         <br />
-        <button onClick={()=>sendRecording(ref.current?.__data)}>Send to API</button>
+        <button onClick={()=>sendRecording(ref.current)}>Send to API</button>
       </header>
     </div>
   );

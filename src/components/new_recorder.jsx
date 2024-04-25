@@ -4,10 +4,41 @@ import "./new_recorder.css";
 
 function Record() {
   const ref = React.useRef();
+  let audioChunks = [];
 
   React.useEffect(() => {
     ref.current = new WavRecorder();
   }, []);
+
+  function sendRecording(audioUrl) {
+    if (!audioUrl) {
+        console.error('Aucun enregistrement audio disponible pour envoyer');
+        return;
+    }
+    const filename = generateUUID() + ".wav"
+    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+    const formData = new FormData();
+    formData.append('audio', audioBlob, filename);
+    formData.append('filename', filename);
+
+    fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Réponse du serveur :', data);
+    })
+    .catch(error => {
+        console.error('Erreur lors de l\'envoi de l\'audio au serveur :', error);
+    });
+}
+
 
   const sendAudioToAPI = async (audio) => {
     // const blob = await ref.current.getWaveBlob(); // Get the audio blob
@@ -40,6 +71,14 @@ function Record() {
     }
   };
 
+  function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
   return (
     <div className="App">
       <header className="App-header">
@@ -59,7 +98,7 @@ function Record() {
         </button> */}
         <br />
         <br />
-        <button onClick={()=>sendAudioToAPI(ref.current?.__data)}>Send to API</button>
+        <button onClick={()=>sendRecording(ref.current?.__data)}>Send to API</button>
       </header>
     </div>
   );

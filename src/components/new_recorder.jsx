@@ -1,74 +1,65 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { WavRecorder } from "webm-to-wav-converter";
-
-
+import "./new_recorder.css";
 
 function Record() {
   const ref = React.useRef();
-  const [audioData, setAudioData] = React.useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
 
   React.useEffect(() => {
-    console.log ("effect started")
     ref.current = new WavRecorder();
   }, []);
 
-  useEffect(() => {
-    // Fetch token from localStorage when component mounts
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+  const sendAudioToAPI = async () => {
+    const blob = await ref.current.exportWAV(); // Get the audio blob
+    const token = localStorage.getItem("token"); // Get token from localStorage
 
-
-  const sendAudioToServer = async (file) => {
     if (!token) {
-        console.error("Missing authorization token. Please login to proceed.");
-        return;
-      }
+      console.error("No token found in localStorage");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("audio", blob);
+
     try {
-      const formData = new FormData();
-      formData.append("audio", new Blob([audioData], { type: "audio/wav" }), "audio.wav");
-  
       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
         method: "POST",
-        body: formData,
         headers: {
-          'Authorization': `Token ${token}`,
+          'Authorization': `Token ${token}`, // Add authorization header with token
         },
+        body: formData,
       });
-  
-      if (response.ok) {
-        console.log("Audio sent successfully");
-      } else {
-        console.error("Failed to send audio");
+
+      if (!response.ok) {
+        throw new Error(`API call failed with status ${response.status}`);
       }
+
+      console.log("Audio sent successfully!");
     } catch (error) {
       console.error("Error sending audio:", error);
     }
   };
-  
+
   return (
     <div className="App">
       <header className="App-header">
-        <h1>WavRecorder class Usage</h1>
+        <h1>Podily WavRecorder</h1>
 
-        <button onClick={() => {
-        console.log ("recording started");
-          ref.current.start();
-          setAudioData(null); // Clear previous recording
-        }}>Start</button>
+        <button onClick={() => ref.current.start()}>Start</button>
         <br />
         <br />
-        <button onClick={() => {
-            console.log ("effect stopped");
-          ref.current.stop();
-          setAudioData(ref.current.getWavBlob);
-        }}>Stop</button>
+        <button onClick={() => ref.current.stop()}>Stop</button>
         <br />
         <br />
-        <button onClick={sendAudioToServer}>Send Audio</button>
+        <button onClick={() => ref.current.download()}>Download 16 bit</button>
+        <br />
+        <br />
+        <button onClick={() => ref.current.download("MyWAVFile", true)}>
+          Download 32 bit
+        </button>
+        <br />
+        <br />
+        <button onClick={sendAudioToAPI}>Send to API</button>
       </header>
     </div>
   );

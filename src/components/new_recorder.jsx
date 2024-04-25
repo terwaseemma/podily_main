@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { WavRecorder } from "webm-to-wav-converter";
 
-const [token, setToken] = useState(localStorage.getItem('token'));
+
 
 function Record() {
   const ref = React.useRef();
   const [audioData, setAudioData] = React.useState(null);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   React.useEffect(() => {
     console.log ("effect started")

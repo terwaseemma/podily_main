@@ -17,7 +17,7 @@ function Record() {
         return;
     }
     const filename = generateUUID() + ".wav"
-    const audioBlob = new Blob(audioUrl, { type: 'audio/wav' });
+    const audioBlob = new Blob([audioChunks], { type: 'audio/wav' });
     const formData = new FormData();
     formData.append('audio', audioBlob, filename);
     formData.append('filename', filename);

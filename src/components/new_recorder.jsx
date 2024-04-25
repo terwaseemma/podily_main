@@ -17,10 +17,12 @@ function Record() {
         return;
     }
     const filename = generateUUID() + ".wav"
-    const audioBlob = new Blob([audioChunks], { type: 'audio/wav' });
+    const audioBlob = new Blob([audioUrl], { type: 'audio/wav' });
+    console.log(audioBlob);
     const formData = new FormData();
     formData.append('audio', audioBlob, filename);
     formData.append('filename', filename);
+    console.log(formData);
 
     fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
         method: 'POST',

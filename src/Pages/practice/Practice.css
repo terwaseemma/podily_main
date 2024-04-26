@@ -1,5 +1,5 @@
 .practice-container {
-    margin-top: 120px;
+    margin: 120px 0;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -8,15 +8,91 @@
 
 .practice-holder {
     width: 90%;
-    max-width: 800px;
-    background-color: #d6d6d6;
-    border-radius: 10px;
+    max-width: 600px;
+    background-color: rgb(26, 119, 240, 0.1);
+    border-radius: 0 !important;
     min-height: 65vh;
-    padding: 5%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
     align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.actions-div {
+  width: 90%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-act {
+  padding: 13px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #2563EA;
+  color: #fff;
+  border-radius: 10px;
+  border: none;
+  width: 50%;
+  justify-content: center;
+}
+
+.script-aud {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+  border: 1px solid #2563EA;
+  border-radius: 10px;
+  width: 50%;
+  justify-content: center;
+}
+
+.analysis {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+}
+
+.script-aud img {
+  width: 17px;
+}
+
+.practice-holder .p {
+    padding: 20px;
+    /* text-align: center; */
+    margin-bottom: 10px;
+}
+
+.pitch-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border-bottom: 1px solid #d6d6d6;
+}
+
+.pitch-content1 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+.flex-row1 {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background-color: #fff;
+  padding: 5px;
+}
+
+.full-width2 {
+  width: 90%;
+  max-width: 600px;
 }
 
 .table-topic {

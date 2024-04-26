@@ -250,7 +250,7 @@ const sendRecording = (audioChunks, audioUrl) => {
   console.log(audioBlob);
   console.log(formData);
 
-  const renderURL = "'https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/";
+  const renderURL = "https://voice-to-speech-analysis.onrender.com/audio/analysis/";
   // You may want to use the local endpoint during development
   // const endpointLocal = 'http://127.0.0.1:8000/audio/analysis/';
   // const endpoint = '';

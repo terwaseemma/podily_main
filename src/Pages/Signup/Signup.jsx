@@ -18,16 +18,16 @@ const Signup = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/register/, ', { firstName, lastName, username, password })
+        axios.post('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/register/', { firstName, lastName, username, password }) // Removed extra comma
             .then(res => {
                 localStorage.setItem('token', res.data.token);
-                console.log(firstName, lastName, username, password)
                 navigate('/onboarding-one');
             })
             .catch(error => {
                 console.error("Authentication error: ", error);
+                alert("Signup failed. Please try again."); // Notify the user about the error
             });
-    }
+    };
 
     return (
         <div className='flex-column full-width main'>

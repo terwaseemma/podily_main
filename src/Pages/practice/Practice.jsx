@@ -1,14 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./Practice.css";
 import Header from "../../components/d_header/Header";
-import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { BsSoundwave } from "react-icons/bs";
 import { FaMicrophone, FaPlay, FaArrowLeft, FaStop, FaProcedures } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router";
 import reverse from "../../assets/reverse.png";
 import forward from "../../assets/forward.png";
-import '../../data/results'
-import '../../data/pathways'
 import ClipLoader from "react-spinners/ClipLoader";
 
 const override = {
@@ -272,6 +269,7 @@ const sendRecording = (audioChunks, audioUrl) => {
       console.log('Server response:', data);
       setStatus('analyzed');
       setAnalysis(data);
+      console.log(analysis)
   })
   .catch(error => {
       console.error('Error sending audio to the server:', error);
@@ -279,6 +277,8 @@ const sendRecording = (audioChunks, audioUrl) => {
       alert('Could not send audio to the server. Please try again.')
   });
 }
+
+console.log(analysis.feedback);
 
 const [status, setStatus] = useState('Not Recording');
 

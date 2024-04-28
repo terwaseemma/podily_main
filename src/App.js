@@ -20,7 +20,7 @@ function App() {
         <Route path="/onboarding-two" element={<OnboardingTwo />} />
         <Route path="/pitch-library" element={<Pathways />} />
         <Route path="/practice/:id" element={<Practice />} />
-        <Route path="/recorder" element={<Record />} />
+        <Route path="/recorder/:id" element={<Record />} />
       </Routes>
     </Router>
   );

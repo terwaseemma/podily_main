@@ -57,6 +57,8 @@ const Pathways = () => {
     },
   ])
 
+  console.log(pathways);
+
   const fetchPitches = async() => {
     try {
         const response = await fetch('https://voice-to-speech-analysis.onrender.com/pitches/');

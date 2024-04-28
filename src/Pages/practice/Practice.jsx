@@ -104,8 +104,9 @@ const Actions = ({ status, starRecording, stopRecording, sendRecording, audioChu
 };
 
 // Main Practice component
-const Practice = () => {
-  const pitchId = useParams().id;
+const Record = () => {
+  // const pitchId = useParams().id;
+  const pitchId = 3;
 
   // State for pitch data
   const [pitch, setPitch] = useState(null);
@@ -321,4 +322,4 @@ const Practice = () => {
   );
 };
 
-export default Practice;
+export default Record;

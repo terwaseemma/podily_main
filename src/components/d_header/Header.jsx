@@ -24,10 +24,10 @@ const Header = ({value}) => {
             </div>
             <ul className="d-nav">
                 <li className={`${value === "library"? "active-route": ""}`}>
-                    <NavLink to='/pathways'><FaTrophy/>Pitch Library </NavLink>
+                    <NavLink to='/pitch-library'><FaTrophy/>Pitch Library </NavLink>
                 </li>
                 <li className={`${value === "practice"? "active-route": ""}`}>
-                <NavLink to='/practice'><FaMicrophone/>Practice</NavLink>
+                <NavLink to='/practice/:id'><FaMicrophone/>Practice</NavLink>
                 </li>
                 {/* <li className={`${value === "recordings"? "active-route": ""}`}>
                 <NavLink to='/recordings'><FaVideo/>Recordings</NavLink>

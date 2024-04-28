@@ -1,324 +1,279 @@
-import React, { useRef, useState, useEffect } from "react";
-import "../Pages/practice/Practice.css";
-import Header from "../components/d_header/Header";
-import { BsSoundwave } from "react-icons/bs";
-import { FaMicrophone, FaPlay, FaArrowLeft, FaStop, FaProcedures } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router";
-import axios from 'axios';
-import reverse from "../assets/reverse.png";
-import forward from "../assets/forward.png";
-import ClipLoader from "react-spinners/ClipLoader";
+import React, { useState, useRef } from "react";
+import { WavRecorder } from "webm-to-wav-converter";
+import "./new_recorder.css";
+import axios from "axios";
 
-const override = {
-  display: "block",
-  margin: "0 auto",
-  borderColor: "blue",
-};
+// function Record() {
+//   const ref = React.useRef();
+//   let audioChunks = [];
 
-// Actions component with multiple recording states
-const Actions = ({ status, starRecording, stopRecording, sendRecording, audioChunks, audioUrl, playRecording, pitch, playPitch }) => {
-  const [loading, setLoading] = useState(true);
-  const [color, setColor] = useState("#ffffff");
+//   React.useEffect(() => {
+//     ref.current = new WavRecorder();
+//   }, []);
 
-  // Render based on recording status
-  if (status === 'Not Recording') {
-    return (
-      <div className="actions-div">
-        <div className="script-aud">
-          <div className="icn">
-            <img src={reverse} alt="reverse" />
-          </div>
-          <div className="icn" onClick={playPitch}>
-            <FaPlay />
-          </div>
-          <div className="icn">
-            <img src={forward} alt="reverse" />
-          </div>
-        </div>
-        <div className="btn-act" onClick={starRecording}>
-          <FaMicrophone />
-          <p>Tap To Speak</p>
-        </div>
-      </div>
-    );
-  } else if (status === 'Recording') {
-    return (
-      <div className="actions-div">
-        <div className="script-aud">
-          <div className="icn">
-            <img src={reverse} alt="reverse" />
-          </div>
-          <div className="icn">
-            <FaPlay />
-          </div>
-          <div className="icn">
-            <img src={forward} alt="reverse" />
-          </div>
-        </div>
-        <div className="btn-act" onClick={stopRecording}>
-          <FaStop />
-          <p>Tap to stop</p>
-        </div>
-      </div>
-    );
-  } else if (status === 'finished recording') {
-    return (
-      <div className="actions-div">
-        <div className="script-aud">
-          <div className="icn">
-            <img src={reverse} alt="reverse" />
-          </div>
-          <div className="icn" onClick={() => playRecording()}>
-            <FaPlay />
-          </div>
-          <div className="icn">
-            <img src={forward} alt="reverse" />
-          </div>
-        </div>
-        <div className="btn-act" onClick={() => sendRecording(audioChunks, audioUrl)}>
-          <FaProcedures />
-          <p>Analyze</p>
-        </div>
-      </div>
-    );
-  } else if (status === 'analyzing') {
-    return (
-      <div className="actions-div">
-        <div className="script-aud">
-          <div className="icn">
-            <img src={reverse} alt="reverse" />
-          </div>
-          <div className="icn">
-            <FaPlay />
-          </div>
-          <div className="icn">
-            <img src={forward} alt="reverse" />
-          </div>
-        </div>
-        <div className="btn-act">
-          <ClipLoader color={color} loading={loading} css={override} size={30} />
-        </div>
-      </div>
-    );
-  }
-};
+//   function sendRecording(audioUrl) {
+//     const token = localStorage.getItem("token");
+//     if (!audioUrl) {
+//         console.error('Aucun enregistrement audio disponible pour envoyer');
+//         return;
+//     }
+//     const filename = generateUUID() + ".wav"
+//     const audioBlob = new Blob([audioUrl], { type: 'audio/wav' });
+//     console.log(audioBlob);
+//     const formData = new FormData();
+//     formData.append('audio', audioBlob, filename);
+//     formData.append('filename', filename);
+//     console.log(formData);
 
-// Main Practice component
-const Record = () => {
-  const pitchId = useParams().id;
+//     fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/', {
+//         method: 'POST',
+//         headers: {
+//             'Authorization': `Token ${token}`, // Add authorization header with token
+//           },
+//         body: formData
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log('Réponse du serveur :', data);
+//     })
+//     .catch(error => {
+//         console.error('Erreur lors de l\'envoi de l\'audio au serveur :', error);
+//     });
+// }
 
-  // State for pitch data
-  const [pitch, setPitch] = useState(null);
 
-  // Fetch pitch data on mount
-  useEffect(() => {
-    const fetchPitch = async () => {
-      try {
-        const response = await axios.get(`https://voice-to-speech-analysis.onrender.com/pitch/${pitchId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch pitch');
-        }
-        const data = await response.json();
-        setPitch(data);
-      } catch (error) {
-        console.error('Error fetching pitch:', error);
-      }
-    };
+//   const sendAudioToAPI = async (audio) => {
+//     // const blob = await ref.current.getWaveBlob(); // Get the audio blob
+//     const token = localStorage.getItem("token"); // Get token from localStorage
 
-    fetchPitch();
-  }, [pitchId]);
+//     if (!token) {
+//       console.error("No token found in localStorage");
+//       return;
+//     }
 
-  const [token, setToken] = useState(localStorage.getItem('token'));
+//     const formData = new FormData();
+//     formData.append("audio", audio);
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+//     try {
+//       const response = await fetch("https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/", {
+//         method: "POST",
+//         headers: {
+//           'Authorization': `Token ${token}`, // Add authorization header with token
+//         },
+//         body: formData,
+//       });
 
-  const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [audioChunks, setAudioChunks] = setAudioChunks([]);
-  const [audioUrl, setAudioUrl] = useState('');
+//       if (!response.ok) {
+//         throw new Error(`API call failed with status ${response.status}`);
+//       }
+
+//       console.log("Audio sent successfully!");
+//     } catch (error) {
+//       console.error("Error sending audio:", error);
+//     }
+//   };
+
+//   function generateUUID() {
+//     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+//         var r = Math.random() * 16 | 0,
+//             v = c == 'x' ? r : (r & 0x3 | 0x8);
+//         return v.toString(16);
+//     });
+// }
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h1>Podily WavRecorder</h1>
+
+//         <button onClick={() => ref.current.start()}>Start</button>
+//         <br />
+//         <br />
+//         <button onClick={() => ref.current.stop()}>Stop</button>
+//         <br />
+//         <br />
+//         <button onClick={() => {ref.current.download(); console.log(ref.current.__data);}}>Download 16 bit</button>
+//         <br />
+//         <br />
+//         {/* <button onClick={() => ref.current.download("MyWAVFile", true)}>
+//           Download 32 bit
+//         </button> */}
+//         <br />
+//         <br />
+//         <button onClick={()=>sendRecording(ref.current?.__data)}>Send to API</button>
+//       </header>
+//     </div>
+//   );
+// }
+
+// export default Record;
+
+// function Record() {
+//     const ref = React.useRef();
+  
+//     React.useEffect(() => {
+//       ref.current = new WavRecorder();
+//     }, []);
+  
+//     const handleDownload = () => {
+//       // Call the download function from WavRecorder
+//       ref.current.download();
+  
+//       // Retrieve the recorded audio blob
+//       const audioBlob = ref.current.audioBlob;
+  
+//       // Create a new Blob object with the audio data
+//       const blob = new Blob([audioBlob], { type: 'audio/wav' });
+  
+//       // Retrieve the auth token from local storage
+//       const token = localStorage.getItem('token');
+//       console.log('Token:', token); // Add this line to check if the token is retrieved
+  
+  
+//       // Define headers for the axios request
+//       const headers = {
+//         'Content-Type': 'audio/wav', // Set the content type to audio/wav
+//         'Authorization': `Token ${token}` // Set the authorization token
+//       };
+  
+//       // Replace 'https://your-backend-api.com/upload-audio' with your actual backend API endpoint
+//       const uploadUrl = 'https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/';
+  
+//       // Make a POST request to send the audio file to backend
+//       axios.post(uploadUrl, blob, { headers })
+//         .then(response => {
+//           console.log('Audio file uploaded successfully:', response.data);
+//         })
+//         .catch(error => {
+//           console.error('Error uploading audio file:', error);
+//         });
+//     };
+  
+//     return (
+//       <div className="Practice">
+//         <header className="Practice-header">
+//           <h1>WavRecorder class Usage</h1>
+  
+//           <button onClick={() => ref.current.start()}>Start</button>
+//           <br />
+//           <br />
+//           <button onClick={() => ref.current.stop()}>Stop</button>
+//           <br />
+//           <br />
+//           <button onClick={handleDownload}>Download 16 bit</button>
+//           <br />
+//           <br />
+//           <button onClick={() => ref.current.download("MyWAVFile", true)}>
+//             Download 32 bit
+//           </button>
+//         </header>
+//       </div>
+//     );
+//   }
+  
+//   export default Record;
+
+
+function Record() {
   const [isRecording, setIsRecording] = useState(false);
-  const [status, setStatus] = useState('Not Recording');
-  const [analysis, setAnalysis] = useState([]);
+  const [analysisResult, setAnalysisResult] = useState(null); // New state for analysis result
 
-  const startRecording = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const recorder = new MediaRecorder(stream);
-    setMediaRecorder(recorder);
+  const mediaRecorderRef = useRef(null);
+  const chunksRef = useRef([]);
 
-    recorder.addEventListener('dataavailable', event => {
-      setAudioChunks(prevChunks => [...prevChunks, event.data]);
-    });
-
-    recorder.addEventListener('stop', () => {
-      const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-      setAudioUrl(URL.createObjectURL(audioBlob));
-    });
-
-    recorder.start();
-    setIsRecording(true);
-    setStatus('Recording');
+  const startRecording = () => {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = handleDataAvailable;
+        mediaRecorderRef.current = mediaRecorder;
+        mediaRecorder.start();
+        setIsRecording(true);
+      })
+      .catch(error => {
+        console.error('Error accessing microphone:', error);
+      });
   };
 
   const stopRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-      setStatus('finished recording');
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
       setIsRecording(false);
     }
   };
 
-  const sendRecording = async () => {
-    if (audioChunks.length === 0) {
-      console.error('No audio recording available');
-      setStatus('Not Recording');
+  const handleDataAvailable = (event) => {
+    if (event.data.size > 0) {
+      chunksRef.current.push(event.data);
+    }
+  };
+
+  const handleDownload = () => {
+    if (chunksRef.current.length === 0) {
+      console.error('No audio recorded');
       return;
     }
 
-    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+    const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'audio.wav';
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleUpload = async () => {
+    if (chunksRef.current.length === 0) {
+      console.error('No audio recorded');
+      return;
+    }
+
+    const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Content-Type': 'audio/wav',
+      'Authorization': `Token ${token}`
+    };
+
+    const uploadUrl = 'https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/';
+
     const formData = new FormData();
-    formData.append('audio', audioBlob, `${generateUUID()}.wav`);
+    formData.append('audio', blob, 'audio.wav');
 
     try {
-      const response = await axios.post(
-        'https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant',
-        formData,
-        {
-          headers: {
-            'Authorization': `Token ${token}`,
-          },
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error('Failed to send audio');
-      }
-
-      setStatus('analyzed');
-      setAnalysis(response.data);
+      const response = await axios.post(uploadUrl, formData, { headers });
+      console.log('Audio file uploaded successfully:', response.data);
+      setAnalysisResult(response.data); // Update the analysis result state
     } catch (error) {
-      console.error('Error sending audio to the server:', error);
-      setStatus('Not Recording');
-      alert('Could not send audio to the server. Please try again.');
+      console.error('Error uploading audio file:', error);
+      setAnalysisResult(null); // Reset the analysis result state
     }
   };
-
-  const playRecording = () => {
-    if (!audioUrl) {
-      console.error('No audio recording available');
-      return;
-    }
-    const audio = new Audio(audioUrl);
-    audio.play();
-  };
-
-  const playPitch = () => {
-    if (pitch && pitch.pitch_audio) {
-      const audio = new Audio(pitch.pitch_audio);
-      audio.play();
-    }
-  };
-
-  const generateUUID = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  };
-
-  if (!pitch) {
-    return <p>Loading...</p>;
-  }
 
   return (
-    <div className="ds">
-      <Header value="practice" />
-      <section className="practice-container">
-        <div className="flex-row full-width2">
-          <div className="icon"><FaArrowLeft /></div>
-          <p>{pitch.pitch_title}</p>
-        </div>
-        <div className="practice-holder">
-          {status === 'analyzed' ? (
-            <div className="analysis">
-              <p>Here's the analysis of your pitch</p>
-              <ul>
-                <li>Pace: {analysis.feedback["pace"]}</li>
-                <li>Confidence: {analysis.feedback?.confidence}</li>
-                <li>Filler Words: {analysis.feedback?.filler_words}</li>
-                <li>Consiousness: {analysis.feedback?.consiousness}</li>
-              </ul>
-              <div className="actions-div">
-                <div className="script-aud">
-                  <div className="icn">
-                    <img src={reverse} alt="reverse" />
-                  </div>
-                  <div className="icn">
-                    <FaPlay />
-                  </div>
-                  <div className="icn">
-                    <img src={forward} alt="reverse" />
-                  </div>
-                </div>
-                <div className="btn-act" onClick={() => setStatus("Not Recording")}>
-                  Pitch Again
-                </div>
-              </div>
-            </div>
-          ) : (
-            <>
-              <p>Kindly note that your pitch must have elements of each segment. You can edit the text to suit yours.</p>
-              <div className="pitch-content">
-                <div className="flex-row1">
-                  <h4>The Hook</h4>
-                </div>
-                <p>{pitch.pitch_hook}</p>
-              </div>
-              <div className="pitch-content">
-                <div className="flex-row1">
-                  <h4>The Value Proposition</h4>
-                </div>
-                <p>{pitch.pitch_value}</p>
-              </div>
-              <div className="pitch-content">
-                <div className="flex-row1">
-                  <h4>The Evidence</h4>
-                </div>
-                <p>{pitch.Evidence}</p>
-              </div>
-              <div className="pitch-content">
-                <div className="flex-row1">
-                  <h4>The Differentiator</h4>
-                </div>
-                <p>{pitch.pitch_differentiator}</p>
-              </div>
-              <div className="pitch-content1">
-                <div className="flex-row1">
-                  <h4>The Call to Action</h4>
-                </div>
-                <p>{pitch.pitch_call_to_action}</p>
-              </div>
-            </>
-          )}
-        </div>
-        <Actions
-          status={status}
-          startRecording={startRecording}
-          stopRecording={stopRecording}
-          sendRecording={sendRecording}
-          audioChunks={audioChunks}
-          audioUrl={audioUrl}
-          playRecording={playRecording}
-          pitch={pitch}
-          playPitch={playPitch}
-        />
-      </section>
+    <div className="Record">
+      <header className="Record-header">
+        <h1>Manual Recording</h1>
+        <button onClick={startRecording} disabled={isRecording}>Start Recording</button>
+        <button onClick={stopRecording} disabled={!isRecording}>Stop Recording</button>
+        <button onClick={handleDownload}>Download(Optional)</button>
+        <button onClick={handleUpload}>Get Feedback</button>
+        {analysisResult && (
+          <div>
+            <h2>Feedback</h2>
+            <pre>{JSON.stringify(analysisResult, null, 2)}</pre>
+          </div>
+        )}
+      </header>
     </div>
   );
-};
+}
 
 export default Record;

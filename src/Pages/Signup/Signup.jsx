@@ -53,7 +53,7 @@ const Signup = () => {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="email">Email</label>
+                            <label htmlFor="username">Username</label>
                             <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
                         </div>
                         <div className="form-group">

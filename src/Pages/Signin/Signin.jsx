@@ -21,7 +21,7 @@ function Signin() {
                 localStorage.setItem('token', res.data.token);
                 console.log("Token:", res.data.token);
                 console.log(username, password);
-                navigate('/onboarding-one');
+                navigate('/pitch-library');
             })
             .catch(error => {
                 console.error("Authentication error: ", error);

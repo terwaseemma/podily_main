@@ -13,12 +13,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Signup/>} />
+        <Route path="/" element={<Signin/>} />
         <Route path="/login" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/onboarding-one" element={<OnboardingOne />} />
         <Route path="/onboarding-two" element={<OnboardingTwo />} />
-        <Route path="/pathways" element={<Pathways />} />
+        <Route path="/pitch-library" element={<Pathways />} />
         <Route path="/practice/:id" element={<Practice />} />
         <Route path="/recorder" element={<Record />} />
       </Routes>

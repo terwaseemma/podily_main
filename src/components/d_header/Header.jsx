@@ -24,10 +24,10 @@ const Header = ({value}) => {
             </div>
             <ul className="d-nav">
                 <li className={`${value === "library"? "active-route": ""}`}>
-                    <NavLink to='/pathways'><FaTrophy/>Pitch Library </NavLink>
+                    <NavLink to='/pitch-library'><FaTrophy/>Pitch Library </NavLink>
                 </li>
                 <li className={`${value === "practice"? "active-route": ""}`}>
-                <NavLink to='/practice'><FaMicrophone/>Practice</NavLink>
+                <NavLink to='/practice/:id'><FaMicrophone/>Practice</NavLink>
                 </li>
                 {/* <li className={`${value === "recordings"? "active-route": ""}`}>
                 <NavLink to='/recordings'><FaVideo/>Recordings</NavLink>
@@ -48,14 +48,14 @@ const Header = ({value}) => {
         </div>
         <ul className="m-nav none" ref={menuRef}>
             <li>
-            <NavLink to='/pathways'><FaTrophy/>Pathways</NavLink>
+            <NavLink to='/pitch-library'><FaTrophy/>Pitch Library</NavLink>
             </li>
             <li>
             <NavLink to='/practice'><FaMicrophone/>Practice</NavLink>
             </li>
-            <li>
+            {/* <li>
             <NavLink to='/recordings'><FaVideo/>Recordings</NavLink>
-            </li>
+            </li> */}
         </ul>
     </section>
   )

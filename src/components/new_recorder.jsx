@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
-import "./Practice.css";
-import Header from "../../components/d_header/Header";
+import "../Pages/practice/Practice.css";
+import Header from "../components/d_header/Header";
 import { BsSoundwave } from "react-icons/bs";
 import { FaMicrophone, FaPlay, FaArrowLeft, FaStop, FaProcedures } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router";
 import axios from 'axios';
-import reverse from "../../assets/reverse.png";
-import forward from "../../assets/forward.png";
+import reverse from "../assets/reverse.png";
+import forward from "../assets/forward.png";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const override = {
@@ -307,7 +307,7 @@ const Record = () => {
         </div>
         <Actions
           status={status}
-          starRecording={starRecording}
+          startRecording={startRecording}
           stopRecording={stopRecording}
           sendRecording={sendRecording}
           audioChunks={audioChunks}

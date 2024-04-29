@@ -121,14 +121,13 @@ const Record = () => {
   // Fetch pitch data on mount
   useEffect(() => {
     async function fetchPitch() {
+
+        const headers = {
+          'Authorization': `Token ${token}`
+        };
         try {
             const response = await fetch(`https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`,
-          {
-            method : 'GET',
-            headers : {
-              'Authorization': 'Token ${token}'
-            }
-          }
+          {headers}
           
           );
             if (!response.ok) {

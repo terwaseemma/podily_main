@@ -195,7 +195,7 @@ const Record = () => {
         
         }
       );
-  
+      console.log
       // Check the response status
       if (response.status !== 200) {
         throw new Error('Network response was not ok');

@@ -118,6 +118,15 @@ const Record = () => {
   const [status, setStatus] = useState('Not Recording');
   const [analysis, setAnalysis] = useState([]);
 
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
   // Fetch pitch data on mount
   useEffect(() => {
     if (token) { // Only fetch if the token is valid
@@ -147,14 +156,7 @@ const Record = () => {
     }
   }, [pitchId, token]); 
 
-  const [token, setToken] = useState(localStorage.getItem('token'));
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+  
 
 
   const [isRecording, setIsRecording] = useState(false);

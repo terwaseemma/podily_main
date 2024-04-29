@@ -122,7 +122,15 @@ const Record = () => {
   useEffect(() => {
     async function fetchPitch() {
         try {
-            const response = await fetch(`https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`);
+            const response = await fetch(`https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`,
+          {
+            method : 'GET',
+            headers : {
+              'Authorization': 'Token ${token}'
+            }
+          }
+          
+          );
             if (!response.ok) {
                 throw new Error('Failed to fetch pitch');
             }

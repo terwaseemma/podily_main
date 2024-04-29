@@ -115,7 +115,7 @@ const Record = () => {
   useEffect(() => {
     const fetchPitch = async () => {
       try {
-        const response = await axios.get(`https://voice-to-speech-analysis.onrender.com/pitch/${pitchId}`);
+        const response = await axios.get(`https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch pitch');
         }

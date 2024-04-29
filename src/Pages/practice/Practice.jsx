@@ -206,7 +206,7 @@ const Record = () => {
       alert('Could not send audio to the server. Please try again.');
     }
 
-    console.log('Received analysis:', response.data);
+    
   };
 
   const playRecording = () => {

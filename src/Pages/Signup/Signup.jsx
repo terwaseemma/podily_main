@@ -13,8 +13,10 @@ const Signup = () => {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -45,12 +47,16 @@ const Signup = () => {
                         <div className="flex-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First Name</label>
-                                <input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required/>
+                                <input type="text" id="first_name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="lastName">Last Name</label>
-                                <input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
+                                <input type="text" id="last_name" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
                             </div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="username">Username</label>

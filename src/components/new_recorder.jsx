@@ -117,22 +117,23 @@ const Record = () => {
   // const [isRecording, setIsRecording] = useState(false);
   const [status, setStatus] = useState('Not Recording');
   const [analysis, setAnalysis] = useState([]);
+  const headers = {
+    'Authorization': `Token ${token}`
+  };
 
   // Fetch pitch data on mount
   useEffect(() => {
     async function fetchPitch() {
-
         const headers = {
-          'Authorization': `Token ${token}`
+          'Authorization': `Token ${token}`, // Ensure the token is correct
         };
         try {
-            const response = await fetch(`https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`,
-          {headers}
-          
-          );
-            if (!response.ok) {
-                throw new Error('Failed to fetch pitch');
-            }
+          const response = await fetch(`https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`, {
+            headers,
+          });
+          if (!response.ok) {
+            throw new Error('Failed to fetch pitch');
+          }
             const data = await response.json();
             setPitch(data);
         } catch (error) {

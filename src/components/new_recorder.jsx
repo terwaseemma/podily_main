@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-// import "./Practice.css";
+import "./new_recorder.css";
 import Header from "./d_header/Header";
 import { BsSoundwave } from "react-icons/bs";
 import { FaMicrophone, FaPlay, FaArrowLeft, FaStop, FaProcedures } from "react-icons/fa";
@@ -282,7 +282,7 @@ const Record = () => {
           {status === 'analyzed' ? (
             <div className="analysis">
               <p>Here's the analysis of your pitch</p>
-              <pre>{analysisResult.latest_message.content}</pre>
+              <pre className="full-width">{analysisResult.latest_message.content}</pre>
               {/* <ul>
                 <li>Pace: {analysis.feedback["pace"]}</li>
                 <li>Confidence: {analysis.feedback?.confidence}</li>

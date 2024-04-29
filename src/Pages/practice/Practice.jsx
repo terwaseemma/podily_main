@@ -200,7 +200,7 @@ const Record = () => {
       if (response.status !== 200) {
         throw new Error('Network response was not ok');
       }
-  
+      console.log("Test");
       // Get the data from the response
       const resultdata = response.data.latest_message.content; // No need for `.json()`, axios handles this
       console.log('Server response:', resultdata);

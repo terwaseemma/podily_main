@@ -274,12 +274,13 @@ const Record = () => {
           {status === 'analyzed' ? (
             <div className="analysis">
               <p>Here's the analysis of your pitch</p>
-              <ul>
+              {analysisResult.latest_message.content}
+              {/* <ul>
                 <li>Pace: {analysis.feedback["pace"]}</li>
                 <li>Confidence: {analysis.feedback?.confidence}</li>
                 <li>Filler Words: {analysis.feedback?.filler_words}</li>
                 <li>Consiousness: {analysis.feedback?.consiousness}</li>
-              </ul>
+              </ul> */}
               <div className="actions-div">
                 <div className="script-aud">
                   <div className="icn">

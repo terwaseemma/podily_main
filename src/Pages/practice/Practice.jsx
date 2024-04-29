@@ -143,7 +143,7 @@ const Record = () => {
   const [audioUrl, setAudioUrl] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [status, setStatus] = useState('Not Recording');
-  const [analysis, setAnalysis] = useState([]);
+  const [resultdata, setAnalysis] = useState([]);
 
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -184,29 +184,36 @@ const Record = () => {
     formData.append('audio', audioBlob, `${generateUUID()}.wav`);
 
     try {
+      // Make the POST request with axios
       const response = await axios.post(
         'https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant',
         formData,
         {
           headers: {
-            'Authorization': `Token ${token}`,
+            Authorization: `Token ${token}`,
           },
+        
         }
       );
-
+  
+      // Check the response status
       if (response.status !== 200) {
-        throw new Error('Failed to send audio');
+        throw new Error('Network response was not ok');
       }
-
+  
+      // Get the data from the response
+      const resultdata = response.data.latest_message.content; // No need for `.json()`, axios handles this
+      console.log('Server response:', resultdata);
+  
+      // Set the analysis and status
       setStatus('analyzed');
-      setAnalysis(response.data);
+      setAnalysis(resultdata);
+  
     } catch (error) {
       console.error('Error sending audio to the server:', error);
       setStatus('Not Recording');
       alert('Could not send audio to the server. Please try again.');
     }
-
-    
   };
 
   const playRecording = () => {
@@ -246,15 +253,16 @@ const Record = () => {
           <p>{pitch.pitch_title}</p>
         </div>
         <div className="practice-holder">
-          {status === 'analyzed' ? (
+          {status === 'analyzed' && resultdata ? (
             <div className="analysis">
               <p>Here's the analysis of your pitch</p>
-              <ul>
-                <li>Pace: {analysis.feedback["pace"]}</li>
+              <pre>{resultdata}</pre>
+              {/* <ul>
+                <li>Pace: {latest_message.content["pace"]}</li>
                 <li>Confidence: {analysis.feedback?.confidence}</li>
                 <li>Filler Words: {analysis.feedback?.filler_words}</li>
                 <li>Consiousness: {analysis.feedback?.consiousness}</li>
-              </ul>
+              </ul> */}
               <div className="actions-div">
                 <div className="script-aud">
                   <div className="icn">

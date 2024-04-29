@@ -57,11 +57,17 @@ const Pathways = () => {
     },
   ])
 
-  console.log(pathways);
-
   const fetchPitches = async() => {
     try {
-        const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/');
+      const token = localStorage.getItem('token');
+
+      const headers = {
+        'Authorization': `Token ${token}`, 
+      };
+      const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/', {
+      method: 'GET', // Specify the HTTP method (default is 'GET')
+      headers, // Include the headers object
+    });
         if (!response.ok) {
             throw new Error('Failed to fetch data');
         }

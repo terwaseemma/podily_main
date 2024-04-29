@@ -117,37 +117,35 @@ const Record = () => {
   // const [isRecording, setIsRecording] = useState(false);
   const [status, setStatus] = useState('Not Recording');
   const [analysis, setAnalysis] = useState([]);
-  const headers = {
-    'Authorization': `Token ${token}`
-  };
 
   // Fetch pitch data on mount
   useEffect(() => {
-    async function fetchPitch() {
+    if (token) { // Only fetch if the token is valid
+      async function fetchPitch() {
         const headers = {
-          'Authorization': `Token ${token}`, // Ensure the token is correct
+          'Authorization': `Token ${token}`, // Add correct token
         };
+  
         try {
-          const response = await fetch(`https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`, {
-            headers,
-          });
+          const response = await fetch(
+            `https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`,
+            { headers }
+          );
+          
           if (!response.ok) {
             throw new Error('Failed to fetch pitch');
           }
-            const data = await response.json();
-            setPitch(data);
+  
+          const data = await response.json();
+          setPitch(data);
         } catch (error) {
-            console.error('Error fetching pitch:', error);
+          console.error('Error fetching pitch:', error); // Log errors
         }
+      }
+  
+      fetchPitch(); // Fetch pitch only if token is valid
     }
-
-    fetchPitch();
-
-    // Cleanup function
-    return () => {
-        // Cleanup code if needed
-    };
-}, [pitchId, token]); 
+  }, [pitchId, token]); 
 
   const [token, setToken] = useState(localStorage.getItem('token'));
 

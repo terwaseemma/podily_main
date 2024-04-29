@@ -21,7 +21,7 @@ const OnboardingTwo = () => {
     const savePublicSpeakingAreas = () => {
         const selectedAreas = audience.filter(area => area.selected)
         console.log(selectedAreas)
-        navigate('/pathways')
+        navigate('/pitch-library')
     }
 
 

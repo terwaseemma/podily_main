@@ -147,7 +147,7 @@ const Record = () => {
     return () => {
         // Cleanup code if needed
     };
-}, [pitchId]); 
+}, [pitchId, token]); 
 
   const [token, setToken] = useState(localStorage.getItem('token'));
 

@@ -61,7 +61,7 @@ const Pathways = () => {
 
   const fetchPitches = async() => {
     try {
-        const response = await fetch('https://voice-to-speech-analysis.onrender.com/pitches/');
+        const response = await fetch('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/');
         if (!response.ok) {
             throw new Error('Failed to fetch data');
         }

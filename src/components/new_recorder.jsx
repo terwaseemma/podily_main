@@ -122,7 +122,7 @@ const Record = () => {
   useEffect(() => {
     async function fetchPitch() {
         try {
-            const response = await fetch(`https://voice-to-speech-analysis.onrender.com/pitch/${pitchId}`);
+            const response = await fetch(`https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch pitch');
             }
@@ -274,7 +274,7 @@ const Record = () => {
           {status === 'analyzed' ? (
             <div className="analysis">
               <p>Here's the analysis of your pitch</p>
-              {analysisResult.latest_message.content}
+              <pre>{analysisResult.latest_message.content}</pre>
               {/* <ul>
                 <li>Pace: {analysis.feedback["pace"]}</li>
                 <li>Confidence: {analysis.feedback?.confidence}</li>

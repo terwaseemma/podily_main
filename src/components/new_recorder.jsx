@@ -285,18 +285,42 @@ const Record = () => {
               <div className="display">
               <p>Here's the analysis of your pitch</p>
               <div className="message-bubble">
-                  <AnalysisCard
-                    title="Introduction"
-                    percentage={75}
-                    feedback={analysisResult.latest_message.content.Hello.Intro}
-                  />
-                  <AnalysisCard
-                    title="Content"
-                    percentage={80}
-                    feedback={analysisResult.latest_message.content.content.more_details}
-                  />
-                  {/* Render other AnalysisCard components for the remaining sections */}
-                </div>
+      {analysisResult && analysisResult.latest_message && analysisResult.latest_message.content && (
+        <>
+          <div>{analysisResult.latest_message.content}</div>
+          <AnalysisCard
+            title="Content"
+            percentage={analysisResult.latest_message.content.includes('Content:\n - Score: 0%') ? 0 : parseInt(analysisResult.latest_message.content.match(/Content:\n - Score: (\d+)%/)[1])}
+            feedback={analysisResult.latest_message.content.match(/Content:\n - More Details: (.*)/)[1]}
+          />
+          <AnalysisCard
+            title="Clarity"
+            percentage={analysisResult.latest_message.content.includes('Clarity:\n - Score: 0%') ? 0 : parseInt(analysisResult.latest_message.content.match(/Clarity:\n - Score: (\d+)%/)[1])}
+            feedback={analysisResult.latest_message.content.match(/Clarity:\n - More Details: (.*)/)[1]}
+          />
+          <AnalysisCard
+            title="Confidence"
+            percentage={analysisResult.latest_message.content.includes('Confidence:\n - Score: 0%') ? 0 : parseInt(analysisResult.latest_message.content.match(/Confidence:\n - Score: (\d+)%/)[1])}
+            feedback={analysisResult.latest_message.content.match(/Confidence:\n - More Details: (.*)/)[1]}
+          />
+          <AnalysisCard
+            title="Tone"
+            percentage={analysisResult.latest_message.content.includes('Tone:\n - Score: 0%') ? 0 : parseInt(analysisResult.latest_message.content.match(/Tone:\n - Score: (\d+)%/)[1])}
+            feedback={analysisResult.latest_message.content.match(/Tone:\n - More Details: (.*)/)[1]}
+          />
+          <AnalysisCard
+            title="Energy"
+            percentage={analysisResult.latest_message.content.includes('Energy:\n - Score: 0%') ? 0 : parseInt(analysisResult.latest_message.content.match(/Energy:\n - Score: (\d+)%/)[1])}
+            feedback={analysisResult.latest_message.content.match(/Energy:\n - More Details: (.*)/)[1]}
+          />
+          <AnalysisCard
+            title="Storytelling"
+            percentage={analysisResult.latest_message.content.includes('Storytelling:\n - Score: 0%') ? 0 : parseInt(analysisResult.latest_message.content.match(/Storytelling:\n - Score: (\d+)%/)[1])}
+            feedback={analysisResult.latest_message.content.match(/Storytelling:\n - More Details: (.*)/)[1]}
+          />
+        </>
+      )}
+    </div>
 
               <div>{analysisResult.latest_message.content}</div>
               </div>

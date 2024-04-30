@@ -281,9 +281,11 @@ const Record = () => {
         <div className="practice-holder">
           {status === 'analyzed' ? (
             <div className="analysis">
+              <div className="display">
               <p>Here's the analysis of your pitch</p>
 
-              {analysisResult.latest_message.content}
+              <prev>{analysisResult.latest_message.content}</prev>
+              </div>
               
               {/* <ul>
                 <li>{analysisResult.latest_message.content.Hello.Intro}</li>

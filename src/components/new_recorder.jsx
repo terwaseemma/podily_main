@@ -8,6 +8,7 @@ import axios from 'axios';
 import reverse from "../assets/reverse.png";
 import forward from "../assets/forward.png";
 import ClipLoader from "react-spinners/ClipLoader";
+import AnalysisCard from './analysis/analysis_card';
 
 const override = {
   display: "block",
@@ -283,12 +284,24 @@ const Record = () => {
             <div className="analysis">
               <div className="display">
               <p>Here's the analysis of your pitch</p>
+              <div className="message-bubble">
+                  <AnalysisCard
+                    title="Introduction"
+                    percentage={75}
+                    feedback={analysisResult.latest_message.content.Hello.Intro}
+                  />
+                  <AnalysisCard
+                    title="Content"
+                    percentage={80}
+                    feedback={analysisResult.latest_message.content.content.more_details}
+                  />
+                  {/* Render other AnalysisCard components for the remaining sections */}
+                </div>
 
-              <prev>{analysisResult.latest_message.content}</prev>
+              <div>{analysisResult.latest_message.content}</div>
               </div>
-              
-              
-              {/* <ul>
+              <div>
+             <ul>
                 <li>{analysisResult.latest_message.content.Hello.Intro}</li>
                 <li>{analysisResult.latest_message.content.content.more_details}</li>
                 <li>{analysisResult.latest_message.content.clarity.more_details}</li>
@@ -297,7 +310,8 @@ const Record = () => {
                 <li>{analysisResult.latest_message.content.energy.more_details}</li>
                 <li>{analysisResult.latest_message.content.storytelling.more_details}</li>
                 <li>{analysisResult.latest_message.content.overall.summary}</li>
-              </ul> */}
+              </ul>
+              </div>
               <div className="actions-div">
                 <div className="script-aud">
                   <div className="icn">

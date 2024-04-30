@@ -284,21 +284,16 @@ const Record = () => {
 
         <div className="practice-holder">
           <div className="analysis">
-                        {status === 'analyzed' ? (
-                    analysisResult ? (
-                      <div className="display">
-                        <p>Here's the analysis of your pitch:</p>
-                        <pre>{JSON.stringify(analysisResult.latest_message.content, null, 2)}</pre> {/* Display the result */}
-                      </div>
-                    ) : (
-                      <p>No analysis result available</p> // Fallback message
-                    )
-                  ) : (
-                    <p>Status is not 'analyzed'</p> // Display different content if not analyzed
-                  )}
+          {analysisResult && (
+                <div className="display">
+                  <p>Here's the analysis of your pitch:</p>
+                  <pre>{analysisResult.latest_message.content}</pre> {/* Ensure `analysisResult` is valid */}
                 </div>
-              );
-                      
+              )  (
+                <p>Your pitch must have elements of each segment. You can edit the text to suit yours.</p>
+              )}
+
+          </div>
 
           <div className="actions-div"> {/* Controls for pitch analysis */}
             <div className="script-aud">

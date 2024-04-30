@@ -283,18 +283,8 @@ const Record = () => {
             <div className="analysis">
               <div className="display">
               <p>Here's the analysis of your pitch</p>
-                <ul>
-                <li>{analysisResult.latest_message.content.Hello.Intro}</li>
-                <li>{analysisResult.latest_message.content.content.more_details}</li>
-                <li>{analysisResult.latest_message.content.clarity.more_details}</li>
-                <li>{analysisResult.latest_message.content.confidence.more_details}</li>
-                <li>{analysisResult.latest_message.content.tone.more_details}</li>
-                <li>{analysisResult.latest_message.content.energy.more_details}</li>
-                <li>{analysisResult.latest_message.content.storytelling.more_details}</li>
-                <li>{analysisResult.latest_message.content.overall.summary}</li>
-              </ul>
 
-              {/* <prev>{analysisResult.latest_message.content}</prev> */}
+              <prev>{<li>{analysisResult.latest_message.content.Hello.Intro}</li>}</prev>
               </div>
               
               {/* <ul>

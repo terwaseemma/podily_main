@@ -91,6 +91,7 @@
 .img-side {
     display: none;
     background-color: #0089F4;
+    height: 100%;
 }
 
 .flex-row-center {

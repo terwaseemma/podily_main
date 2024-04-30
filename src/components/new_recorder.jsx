@@ -233,7 +233,7 @@ const Record = () => {
     try {
       const response = await axios.post(uploadUrl, formData, { headers });
       console.log('Audio file uploaded successfully:', response.data);
-      setAnalysisResult(response.data.latest_message.content); // Update the analysis result state
+      setAnalysisResult(response.data); // Update the analysis result state
       setStatus("analyzed")
     } catch (error) {
       console.error('Error uploading audio file:', error);
@@ -279,19 +279,20 @@ const Record = () => {
           <p>{pitch.pitch_title}</p>
         </div>
         <div className="practice-holder">
-          {status === 'analyzed' ? 
-          analysisResult && (
+          {status === 'analyzed' ? (
             <div className="analysis">
               <p>Here's the analysis of your pitch</p>
               
-              <pre>{analysisResult}</pre>
-              
-              {/* <ul>
-                <li>Pace: {analysis.feedback["pace"]}</li>
-                <li>Confidence: {analysis.feedback?.confidence}</li>
-                <li>Filler Words: {analysis.feedback?.filler_words}</li>
-                <li>Consiousness: {analysis.feedback?.consiousness}</li>
-              </ul> */}
+              <ul>
+                <li>{analysisResult.latest_message.content.Hello.Intro}</li>
+                <li>{analysisResult.latest_message.content.content.more_details}</li>
+                <li>{analysisResult.latest_message.content.clarity.more_details}</li>
+                <li>{analysisResult.latest_message.content.confidence.more_details}</li>
+                <li>{analysisResult.latest_message.content.tone.more_details}</li>
+                <li>{analysisResult.latest_message.content.energy.more_details}</li>
+                <li>{analysisResult.latest_message.content.storytelling.more_details}</li>
+                <li>{analysisResult.latest_message.content.overall.summary}</li>
+              </ul>
               <div className="actions-div">
                 <div className="script-aud">
                   <div className="icn">
@@ -322,13 +323,13 @@ const Record = () => {
                 <div className="flex-row1">
                   <h4>The Value Proposition</h4>
                 </div>
-                <p>{pitch.pitch_value}</p>
+                <p>{pitch.value_proposition}</p>
               </div>
               <div className="pitch-content">
                 <div className="flex-row1">
                   <h4>The Evidence</h4>
                 </div>
-                <p>{pitch.Evidence}</p>
+                <p>{pitch.evidence_text}</p>
               </div>
               <div className="pitch-content">
                 <div className="flex-row1">

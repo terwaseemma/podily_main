@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo.svg';
 import './Header.css';
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { IoMenu } from "react-icons/io5";

@@ -252,8 +252,8 @@ const Record = () => {
   };
 
   const playPitch = () => {
-    if (pitch && pitch.pitch_audio) {
-      const audio = new Audio(pitch.pitch_audio);
+    if (pitch && pitch.audio_file) {
+      const audio = new Audio(pitch.audio_file);
       audio.play();
     }
   };

@@ -89,7 +89,7 @@ useEffect(() => {
         <div className='pathway-list'>
           {pathways.map((pathway) => (
             <NavLink to={`/practice/${pathway.id}`} className='pathway' key={pathway.id}>
-              <img src={pathway.pitch_image} alt={pathway.title} />
+              <img src={pathway1} alt={pathway.title} />
               <div className='flex-row-space pathway-info'>
                 <div className="flex-column2">
                 <h2>{pathway.pitch_title}</h2>

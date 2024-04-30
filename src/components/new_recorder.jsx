@@ -284,14 +284,15 @@ const Record = () => {
 
         <div className="practice-holder">
           <div className="analysis">
-            {status === 'analyzed' ? (
-              <div className="display">
-                <p>Here's the analysis of your pitch:</p>
-                <pre>{analysisResult}</pre> {/* Display the analysis result */}
-              </div>
-            ) : (
-              <p>Your pitch must have elements of each segment. You can edit the text to suit yours.</p>
-            )}
+          {status === 'analyzed' && analysisResult ? (
+                <div className="display">
+                  <p>Here's the analysis of your pitch:</p>
+                  <pre>{analysisResult}</pre> {/* Ensure `analysisResult` is valid */}
+                </div>
+              ) : (
+                <p>Your pitch must have elements of each segment. You can edit the text to suit yours.</p>
+              )}
+
           </div>
 
           <div className="actions-div"> {/* Controls for pitch analysis */}

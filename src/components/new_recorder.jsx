@@ -282,8 +282,10 @@ const Record = () => {
           {status === 'analyzed' ? (
             <div className="analysis">
               <p>Here's the analysis of your pitch</p>
+
+              {analysisResult.latest_message.content.Hello.Intro}
               
-              <ul>
+              {/* <ul>
                 <li>{analysisResult.latest_message.content.Hello.Intro}</li>
                 <li>{analysisResult.latest_message.content.content.more_details}</li>
                 <li>{analysisResult.latest_message.content.clarity.more_details}</li>
@@ -292,7 +294,7 @@ const Record = () => {
                 <li>{analysisResult.latest_message.content.energy.more_details}</li>
                 <li>{analysisResult.latest_message.content.storytelling.more_details}</li>
                 <li>{analysisResult.latest_message.content.overall.summary}</li>
-              </ul>
+              </ul> */}
               <div className="actions-div">
                 <div className="script-aud">
                   <div className="icn">
@@ -323,7 +325,7 @@ const Record = () => {
                 <div className="flex-row1">
                   <h4>The Value Proposition</h4>
                 </div>
-                <p>{pitch.value_proposition}</p>
+                <p>{pitch.value_preposition}</p>
               </div>
               <div className="pitch-content">
                 <div className="flex-row1">

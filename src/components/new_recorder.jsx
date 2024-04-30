@@ -233,7 +233,7 @@ const Record = () => {
     try {
       const response = await axios.post(uploadUrl, formData, { headers });
       console.log('Audio file uploaded successfully:', response.data);
-      setAnalysisResult(response.data); // Update the analysis result state
+      setAnalysisResult(response.data.latest_message.content); // Update the analysis result state
       setStatus("analyzed")
     } catch (error) {
       console.error('Error uploading audio file:', error);

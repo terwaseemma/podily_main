@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './Signin.css';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo.svg';
 import formImg from '../../assets/form-img.png';
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -21,7 +21,7 @@ function Signin() {
                 localStorage.setItem('token', res.data.token);
                 console.log("Token:", res.data.token);
                 console.log(username, password);
-                navigate('/onboarding-one');
+                navigate('/pitch-library');
             })
             .catch(error => {
                 console.error("Authentication error: ", error);

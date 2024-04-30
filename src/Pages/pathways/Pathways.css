@@ -6,7 +6,7 @@
 }
 
 .pathways {
-    margin-top: 100px;
+    margin: 100px 0;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -23,15 +23,25 @@
 
 .pathway {
     width: 100%;
-    max-width: 280px;
+    max-width: 250px;
+    border-radius: 10px;
+    /* background-color: rgb(0, 137, 244, 0.5); */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: #2e2d2d;
+    text-decoration: none;
+}
+
+.pathway img {
+    width: 100%;
+    border-radius: 10px 10px 0 0;
 }
 
 .pathway-info {
     padding: 20px;
-    border: 1px solid #2e2d2d;
+    /* border: 1px solid #2e2d2d; */
     border-top: none;
     align-items: flex-start;
-    height: 180px;
+    /* height: 120px; */
 }
 
 .pathway h2 {

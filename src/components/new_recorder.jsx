@@ -1,13 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
-import "./Practice.css";
-import Header from "../../components/d_header/Header";
+import "./new_recorder.css";
+import Header from "./d_header/Header";
 import { BsSoundwave } from "react-icons/bs";
 import { FaMicrophone, FaPlay, FaArrowLeft, FaStop, FaProcedures } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router";
 import axios from 'axios';
-import reverse from "../../assets/reverse.png";
-import forward from "../../assets/forward.png";
+import reverse from "../assets/reverse.png";
+import forward from "../assets/forward.png";
 import ClipLoader from "react-spinners/ClipLoader";
+import AnalysisCard from './analysis/analysis_card';
 
 const override = {
   display: "block",
@@ -16,7 +17,7 @@ const override = {
 };
 
 // Actions component with multiple recording states
-const Actions = ({ status, starRecording, stopRecording, sendRecording, audioChunks, audioUrl, playRecording, pitch, playPitch }) => {
+const Actions = ({ status, startRecording, stopRecording, sendRecording, audioChunks, audioUrl, playRecording, pitch, playPitch }) => {
   const [loading, setLoading] = useState(true);
   const [color, setColor] = useState("#ffffff");
 
@@ -35,7 +36,7 @@ const Actions = ({ status, starRecording, stopRecording, sendRecording, audioChu
             <img src={forward} alt="reverse" />
           </div>
         </div>
-        <div className="btn-act" onClick={starRecording}>
+        <div className="btn-act" onClick={() => startRecording()}>
           <FaMicrophone />
           <p>Tap To Speak</p>
         </div>
@@ -75,7 +76,7 @@ const Actions = ({ status, starRecording, stopRecording, sendRecording, audioChu
             <img src={forward} alt="reverse" />
           </div>
         </div>
-        <div className="btn-act" onClick={() => sendRecording(audioChunks, audioUrl)}>
+        <div className="btn-act" onClick={() => sendRecording()}>
           <FaProcedures />
           <p>Analyze</p>
         </div>
@@ -105,29 +106,18 @@ const Actions = ({ status, starRecording, stopRecording, sendRecording, audioChu
 
 // Main Practice component
 const Record = () => {
-  // const pitchId = useParams().id;
-  const pitchId = 3;
+  const pitchId = useParams().id;
+  // const pitchId = 2;
 
   // State for pitch data
   const [pitch, setPitch] = useState(null);
-
-  // Fetch pitch data on mount
-  useEffect(() => {
-    const fetchPitch = async () => {
-      try {
-        const response = await axios.get(`https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch pitch');
-        }
-        const data = await response.json();
-        setPitch(data);
-      } catch (error) {
-        console.error('Error fetching pitch:', error);
-      }
-    };
-
-    fetchPitch();
-  }, [pitchId]);
+  
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [audioChunks, setAudioChunks] = useState([]);
+  const [audioUrl, setAudioUrl] = useState('');
+  // const [isRecording, setIsRecording] = useState(false);
+  const [status, setStatus] = useState('Not Recording');
+  const [analysis, setAnalysis] = useState([]);
 
   const [token, setToken] = useState(localStorage.getItem('token'));
 
@@ -138,83 +128,120 @@ const Record = () => {
     }
   }, []);
 
-  const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [audioChunks, setAudioChunks] = setAudioChunks([]);
-  const [audioUrl, setAudioUrl] = useState('');
+  // Fetch pitch data on mount
+  useEffect(() => {
+    if (token) { // Only fetch if the token is valid
+      async function fetchPitch() {
+        const headers = {
+          'Authorization': `Token ${token}`, // Add correct token
+        };
+  
+        try {
+          const response = await fetch(
+            `https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/pitches/${pitchId}`,
+            { headers }
+          );
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch pitch');
+          }
+  
+          const data = await response.json();
+          setPitch(data);
+        } catch (error) {
+          console.error('Error fetching pitch:', error); // Log errors
+        }
+      }
+  
+      fetchPitch(); // Fetch pitch only if token is valid
+    }
+  }, [pitchId, token]); 
+
+  
+
+
   const [isRecording, setIsRecording] = useState(false);
-  const [status, setStatus] = useState('Not Recording');
-  const [resultdata, setAnalysis] = useState([]);
+  const [analysisResult, setAnalysisResult] = useState(null); // New state for analysis result
 
-  const startRecording = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const recorder = new MediaRecorder(stream);
-    setMediaRecorder(recorder);
+  const mediaRecorderRef = useRef(null);
+  const chunksRef = useRef([]);
 
-    recorder.addEventListener('dataavailable', event => {
-      setAudioChunks(prevChunks => [...prevChunks, event.data]);
-    });
-
-    recorder.addEventListener('stop', () => {
-      const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-      setAudioUrl(URL.createObjectURL(audioBlob));
-    });
-
-    recorder.start();
-    setIsRecording(true);
-    setStatus('Recording');
+  const startRecording = () => {
+    console.log("recording started");
+    setStatus("Recording")
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = handleDataAvailable;
+        mediaRecorderRef.current = mediaRecorder;
+        mediaRecorder.start();
+        setIsRecording(true);
+      })
+      .catch(error => {
+        console.error('Error accessing microphone:', error);
+      });
   };
 
   const stopRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-      setStatus('finished recording');
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
       setIsRecording(false);
+      setStatus("finished recording")
     }
   };
 
-  const sendRecording = async () => {
-    if (audioChunks.length === 0) {
-      console.error('No audio recording available');
-      setStatus('Not Recording');
+  const handleDataAvailable = (event) => {
+    if (event.data.size > 0) {
+      chunksRef.current.push(event.data);
+    }
+  };
+
+  const handleDownload = () => {
+    if (chunksRef.current.length === 0) {
+      console.error('No audio recorded');
       return;
     }
 
-    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+    const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'audio.wav';
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleUpload = async () => {
+    setStatus("analyzing")
+    if (chunksRef.current.length === 0) {
+      console.error('No audio recorded');
+      return;
+    }
+
+    const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Content-Type': 'audio/wav',
+      'Authorization': `Token ${token}`
+    };
+
+    const uploadUrl = 'https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant/';
+
     const formData = new FormData();
-    formData.append('audio', audioBlob, `${generateUUID()}.wav`);
+    formData.append('audio', blob, 'audio.wav');
 
     try {
-      // Make the POST request with axios
-      const response = await axios.post(
-        'https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/run_assistant',
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        
-        }
-      );
-      console.log("New test");
-      // Check the response status
-      if (response.status !== 200) {
-        throw new Error('Network response was not ok');
-      }
-      console.log("Test");
-      // Get the data from the response
-      const resultdata = response.data.latest_message.content; // No need for `.json()`, axios handles this
-      console.log('Server response:', resultdata);
-  
-      // Set the analysis and status
-      setStatus('analyzed');
-      setAnalysis(resultdata);
-  
+      const response = await axios.post(uploadUrl, formData, { headers });
+      console.log('Audio file uploaded successfully:', response.data);
+      setAnalysisResult(response.data); // Update the analysis result state
+      setStatus("analyzed")
     } catch (error) {
-      console.error('Error sending audio to the server:', error);
-      setStatus('Not Recording');
-      alert('Could not send audio to the server. Please try again.');
+      console.error('Error uploading audio file:', error);
+      setAnalysisResult(null); // Reset the analysis result state
     }
   };
+
 
   const playRecording = () => {
     if (!audioUrl) {
@@ -226,8 +253,8 @@ const Record = () => {
   };
 
   const playPitch = () => {
-    if (pitch && pitch.pitch_audio) {
-      const audio = new Audio(pitch.pitch_audio);
+    if (pitch && pitch.audio_file) {
+      const audio = new Audio(pitch.audio_file);
       audio.play();
     }
   };
@@ -253,16 +280,38 @@ const Record = () => {
           <p>{pitch.pitch_title}</p>
         </div>
         <div className="practice-holder">
-          {status === 'analyzed' && resultdata ? (
+          {status === 'analyzed' ? (
             <div className="analysis">
+              <div className="display">
               <p>Here's the analysis of your pitch</p>
-              <pre>{resultdata}</pre>
-              {/* <ul>
-                <li>Pace: {latest_message.content["pace"]}</li>
-                <li>Confidence: {analysis.feedback?.confidence}</li>
-                <li>Filler Words: {analysis.feedback?.filler_words}</li>
-                <li>Consiousness: {analysis.feedback?.consiousness}</li>
-              </ul> */}
+              <div className="message-bubble">
+                  <AnalysisCard
+                    title="Introduction"
+                    percentage={75}
+                    feedback={analysisResult.latest_message.content.Hello.Intro}
+                  />
+                  <AnalysisCard
+                    title="Content"
+                    percentage={80}
+                    feedback={analysisResult.latest_message.content.content.more_details}
+                  />
+                  {/* Render other AnalysisCard components for the remaining sections */}
+                </div>
+
+              <div>{analysisResult.latest_message.content}</div>
+              </div>
+              <div>
+             <ul>
+                <li>{analysisResult.latest_message.content.Hello.Intro}</li>
+                <li>{analysisResult.latest_message.content.content.more_details}</li>
+                <li>{analysisResult.latest_message.content.clarity.more_details}</li>
+                <li>{analysisResult.latest_message.content.confidence.more_details}</li>
+                <li>{analysisResult.latest_message.content.tone.more_details}</li>
+                <li>{analysisResult.latest_message.content.energy.more_details}</li>
+                <li>{analysisResult.latest_message.content.storytelling.more_details}</li>
+                <li>{analysisResult.latest_message.content.overall.summary}</li>
+              </ul>
+              </div>
               <div className="actions-div">
                 <div className="script-aud">
                   <div className="icn">
@@ -293,13 +342,13 @@ const Record = () => {
                 <div className="flex-row1">
                   <h4>The Value Proposition</h4>
                 </div>
-                <p>{pitch.pitch_value}</p>
+                <p>{pitch.value_preposition}</p>
               </div>
               <div className="pitch-content">
                 <div className="flex-row1">
                   <h4>The Evidence</h4>
                 </div>
-                <p>{pitch.Evidence}</p>
+                <p>{pitch.evidence_text}</p>
               </div>
               <div className="pitch-content">
                 <div className="flex-row1">
@@ -320,7 +369,7 @@ const Record = () => {
           status={status}
           startRecording={startRecording}
           stopRecording={stopRecording}
-          sendRecording={sendRecording}
+          sendRecording={handleUpload}
           audioChunks={audioChunks}
           audioUrl={audioUrl}
           playRecording={playRecording}

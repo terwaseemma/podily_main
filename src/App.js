@@ -7,18 +7,20 @@ import OnboardingOne from './Pages/first_onboard/OnboardingOne';
 import OnboardingTwo from './Pages/second_onboard/OnboardingTwo';
 import Pathways from './Pages/pathways/Pathways';
 import Practice from './Pages/practice/Practice';
+import Record from './components/new_recorder.jsx';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Signup/>} />
+        <Route path="/" element={<Signin/>} />
         <Route path="/login" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/onboarding-one" element={<OnboardingOne />} />
         <Route path="/onboarding-two" element={<OnboardingTwo />} />
-        <Route path="/pathways" element={<Pathways />} />
-        <Route path="/practice/" element={<Practice />} />
+        <Route path="/pitch-library" element={<Pathways />} />
+        <Route path="/practice/:id" element={<Record />} />
+        <Route path="/recorder/:id" element={<Record />} />
       </Routes>
     </Router>
   );

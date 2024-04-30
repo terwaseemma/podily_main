@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './Signup.css';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo.svg';
 import formImg from '../../assets/form-img.png';
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -13,21 +13,23 @@ const Signup = () => {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/register/, ', { firstName, lastName, username, password })
+        axios.post('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/register/', { firstName, lastName, username, password }) // Removed extra comma
             .then(res => {
                 localStorage.setItem('token', res.data.token);
-                console.log(firstName, lastName, username, password)
                 navigate('/onboarding-one');
             })
             .catch(error => {
                 console.error("Authentication error: ", error);
+                alert("Signup failed. Please try again."); // Notify the user about the error
             });
-    }
+    };
 
     return (
         <div className='flex-column full-width main'>
@@ -45,15 +47,19 @@ const Signup = () => {
                         <div className="flex-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First Name</label>
-                                <input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required/>
+                                <input type="text" id="first_name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="lastName">Last Name</label>
-                                <input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
+                                <input type="text" id="last_name" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
                             </div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
+                            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="username">Username</label>
                             <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
                         </div>
                         <div className="form-group">

@@ -283,7 +283,7 @@ const Record = () => {
             <div className="analysis">
               <p>Here's the analysis of your pitch</p>
 
-              {analysisResult.latest_message.content.Hello.Intro}
+              {analysisResult.latest_message.content}
               
               {/* <ul>
                 <li>{analysisResult.latest_message.content.Hello.Intro}</li>

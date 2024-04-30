@@ -281,21 +281,12 @@ const Record = () => {
         <div className="practice-holder">
           {status === 'analyzed' ? (
             <div className="analysis">
-        
-        {analysisResult && (
-          <div className="analysis-container">
-            <h2>Here's the analysis of your pitch</h2>
-            <pre>{analysisResult.latest_message.content}</pre>
-          </div>
-        )}
-              
-              {/* <div className="display">
-              <p>Here's the analysis of your pitch</p>
-
-              <prev>{analysisResult.latest_message.content}</prev>
-              </div>
-               */}
-              
+              {analysisResult && (
+                <div className="display">
+                  <p>Here's the analysis of your pitch</p>
+                  <pre>{analysisResult}</pre> 
+                </div>
+              )}             
               {/* <ul>
                 <li>{analysisResult.latest_message.content.Hello.Intro}</li>
                 <li>{analysisResult.latest_message.content.content.more_details}</li>

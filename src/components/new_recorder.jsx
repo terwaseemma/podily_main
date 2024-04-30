@@ -288,7 +288,7 @@ const Record = () => {
                     analysisResult ? (
                       <div className="display">
                         <p>Here's the analysis of your pitch:</p>
-                        <pre>{JSON.stringify(analysisResult, null, 2)}</pre> {/* Display the result */}
+                        <pre>{JSON.stringify(analysisResult.latest_message.content, null, 2)}</pre> {/* Display the result */}
                       </div>
                     ) : (
                       <p>No analysis result available</p> // Fallback message

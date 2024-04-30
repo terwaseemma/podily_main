@@ -321,11 +321,11 @@ const Record = () => {
         </>
       )}
     </div>
-
-              <div>{analysisResult.latest_message.content}</div>
               </div>
-              <div>
-             <ul>
+             
+                {/**
+                 *  <div>
+                 *  <ul>
                 <li>{analysisResult.latest_message.content.Hello.Intro}</li>
                 <li>{analysisResult.latest_message.content.content.more_details}</li>
                 <li>{analysisResult.latest_message.content.clarity.more_details}</li>
@@ -336,6 +336,8 @@ const Record = () => {
                 <li>{analysisResult.latest_message.content.overall.summary}</li>
               </ul>
               </div>
+                 */}
+
               <div className="actions-div">
                 <div className="script-aud">
                   <div className="icn">

@@ -38,7 +38,7 @@ const Header = ({value}) => {
                     <img src={avarta} alt="avarta" />
                 </div>
                 <div className="profile-data">
-                    <p>Hi, Habiba</p>
+                    <p>Hi, Amina</p>
                     <MdKeyboardArrowDown />
                 </div>
                 <div className="humburger" onClick={() => {toggleMenu()}}>

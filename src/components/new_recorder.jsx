@@ -321,8 +321,9 @@ const Record = () => {
         </>
       )}
     </div>
-              </div>
-             
+
+<div>{analysisResult.latest_message.content}</div>
+</div>
                 {/**
                  *  <div>
                  *  <ul>

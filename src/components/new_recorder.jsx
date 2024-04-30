@@ -279,13 +279,16 @@ const Record = () => {
           <p>{pitch.pitch_title}</p>
         </div>
         <div className="practice-holder">
+          {status === 'analyzed' ? (
             <div className="analysis">
-              <div className="analysis-container">
+        
+        {analysisResult && (
+          <div className="analysis-container">
             <h2>Here's the analysis of your pitch</h2>
             <pre>{analysisResult.latest_message.content}</pre>
           </div>
-       
-          
+        )}
+              
               {/* <div className="display">
               <p>Here's the analysis of your pitch</p>
 
@@ -354,7 +357,7 @@ const Record = () => {
                 <p>{pitch.pitch_call_to_action}</p>
               </div>
             </>
-          )
+          )}
         </div>
         <Actions
           status={status}

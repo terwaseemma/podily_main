@@ -6,3 +6,17 @@
   .full-width {
     width: 100%;
   }
+
+  .practice-container {
+    overflow: auto; /* Add scroll bars if content overflows */
+  }
+  
+  .practice-holder {
+    overflow: auto; /* Add scroll bars if content overflows */
+    max-height: calc(100vh - 200px); /* Adjust the maximum height as needed */
+  }
+  
+  .analysis-container {
+    overflow-wrap: break-word; /* Break long words to prevent overflow */
+    word-wrap: break-word;
+  }

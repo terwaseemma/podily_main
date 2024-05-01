@@ -283,7 +283,7 @@ const Record = () => {
             <div className="analysis">
               <div className="analysis-container">
             <h2>Here's the analysis of your pitch</h2>
-            {analysisResult.latest_message.content}
+            <pre>{analysisResult.latest_message.content}</pre>
           </div>
         
               

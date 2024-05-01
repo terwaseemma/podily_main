@@ -285,7 +285,18 @@ const Record = () => {
         {analysisResult && (
           <div className="analysis-container">
             <h2>Here's the analysis of your pitch</h2>
-            <pre>{analysisResult.latest_message.content}</pre>
+            {
+                <ul>
+                  <li>{analysisResult.latest_message.content.Hello.Intro}</li>
+                  <li>{analysisResult.latest_message.content.content.more_details}</li>
+                  <li>{analysisResult.latest_message.content.clarity.more_details}</li>
+                  <li>{analysisResult.latest_message.content.confidence.more_details}</li>
+                  <li>{analysisResult.latest_message.content.tone.more_details}</li>
+                  <li>{analysisResult.latest_message.content.energy.more_details}</li>
+                  <li>{analysisResult.latest_message.content.storytelling.more_details}</li>
+                  <li>{analysisResult.latest_message.content.overall.summary}</li>
+              </ul> 
+            }
           </div>
         )}
               

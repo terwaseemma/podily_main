@@ -279,12 +279,14 @@ const Record = () => {
           <p>{pitch.pitch_title}</p>
         </div>
         <div className="practice-holder">
-            {analysisResult && (
-              <div className="analysis-container">
-                <h2>Feedback</h2>
-                <pre>{analysisResult}</pre>
-            
-         
+          {status === 'analyzed' ? 
+                  
+              analysisResult && (
+                <div className="analysis-container">
+                  <h2>Here's the analysis of your pitch</h2>
+                  <pre>{analysisResult}</pre>
+               
+              
               
               {/* <div className="display">
               <p>Here's the analysis of your pitch</p>
@@ -320,7 +322,7 @@ const Record = () => {
                 </div>
               </div>
             </div>
-          )  (
+          ) : (
             <>
               <p>Kindly note that your pitch must have elements of each segment. You can edit the text to suit yours.</p>
               <div className="pitch-content">

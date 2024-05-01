@@ -1,7 +1,7 @@
 import React from 'react';
 import './OnboardingOne.css';
 import onboardOne from '../../assets/onboardone.png'; 
-import logo from '../../assets/logo.svg';
+import logo from '../../assets/logo.png';
 import { FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 

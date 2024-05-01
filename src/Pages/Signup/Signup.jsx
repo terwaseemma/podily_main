@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './Signup.css';
-import logo from '../../assets/logo.svg';
+import logo from '../../assets/logo.png';
 import formImg from '../../assets/form-img.png';
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router-dom';

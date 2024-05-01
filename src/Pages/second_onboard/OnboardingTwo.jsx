@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './OnboardingTwo.css';
 import onboardTwo from '../../assets/onboardtwo.png';
-import logo from '../../assets/logo.svg';
+import logo from '../../assets/logo.png';
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { NavLink, useNavigate } from 'react-router-dom';
 import avarta from '../../assets/onboardavarta.png';

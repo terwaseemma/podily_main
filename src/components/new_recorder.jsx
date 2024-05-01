@@ -272,7 +272,8 @@ const Record = () => {
 
   return (
     <div className="ds">
-    
+      <Header value="practice" />
+      <section className="practice-container">
         <div className="flex-row full-width2">
           <div className="icon"><FaArrowLeft /></div>
           <p>{pitch.pitch_title}</p>
@@ -369,7 +370,7 @@ const Record = () => {
           pitch={pitch}
           playPitch={playPitch}
         />
-     
+      </section>
     </div>
   );
 };

@@ -16,10 +16,18 @@ const Header = ({ value }) => {
   const toggleMenu = () => {
     setIsMenuVisible(!isMenuVisible);
   };
+  
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchUsername = async () => {
-      const token = localStorage.getItem('authToken'); // Fetch the token from localStorage
       if (!token) {
         console.error("No authentication token found in localStorage");
         return;

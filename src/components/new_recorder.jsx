@@ -271,107 +271,92 @@ const Record = () => {
   }
 
   return (
-    <div className="ds">
-      <Header value="practice" />
-      <section className="practice-container">
-        <div className="flex-row full-width2">
-          <div className="icon"><FaArrowLeft /></div>
-          <p>{pitch.pitch_title}</p>
-        </div>
-        <div className="practice-holder">
-          {status === 'analyzed' ? (
-            <div className="analysis">
-        
-        {analysisResult && (
+<div className="ds">
+  <Header value="practice" />
+
+  <section className="practice-container">
+    <div className="flex-row full-width2">
+      <div className="icon">
+        <FaArrowLeft />
+      </div>
+      <p>{pitch.pitch_title}</p> {/* Display the pitch title */}
+    </div>
+
+    <div className="practice-holder">  
+      <div className="analysis">
+        {status === 'analyzed' && analysisResult ? ( // Corrected conditional rendering
           <div className="analysis-container">
             <h2>Here's the analysis of your pitch</h2>
-            <pre>{analysisResult.latest_message.content}</pre>
+            <pre>{analysisResult.latest_message.content}</pre> {/* Display analysis result */}
           </div>
+        ) : (
+          <p>Kindly note that your pitch must have elements of each segment. You can edit the text to suit yours.</p>
         )}
-              
-              {/* <div className="display">
-              <p>Here's the analysis of your pitch</p>
-
-              <prev>{analysisResult.latest_message.content}</prev>
-              </div>
-               */}
-              
-              {/* <ul>
-                <li>{analysisResult.latest_message.content.Hello.Intro}</li>
-                <li>{analysisResult.latest_message.content.content.more_details}</li>
-                <li>{analysisResult.latest_message.content.clarity.more_details}</li>
-                <li>{analysisResult.latest_message.content.confidence.more_details}</li>
-                <li>{analysisResult.latest_message.content.tone.more_details}</li>
-                <li>{analysisResult.latest_message.content.energy.more_details}</li>
-                <li>{analysisResult.latest_message.content.storytelling.more_details}</li>
-                <li>{analysisResult.latest_message.content.overall.summary}</li>
-              </ul> */}
-              <div className="actions-div">
-                <div className="script-aud">
-                  <div className="icn">
-                    <img src={reverse} alt="reverse" />
-                  </div>
-                  <div className="icn">
-                    <FaPlay />
-                  </div>
-                  <div className="icn">
-                    <img src={forward} alt="reverse" />
-                  </div>
-                </div>
-                <div className="btn-act" onClick={() => setStatus("Not Recording")}>
-                  Pitch Again
-                </div>
-              </div>
+        
+        <div className="actions-div"> {/* Controls for pitch analysis */}
+          <div className="script-aud">
+            <div className="icn">
+              <img src={reverse} alt="reverse" />
             </div>
-          ) : (
-            <>
-              <p>Kindly note that your pitch must have elements of each segment. You can edit the text to suit yours.</p>
-              <div className="pitch-content">
-                <div className="flex-row1">
-                  <h4>The Hook</h4>
-                </div>
-                <p>{pitch.pitch_hook}</p>
-              </div>
-              <div className="pitch-content">
-                <div className="flex-row1">
-                  <h4>The Value Proposition</h4>
-                </div>
-                <p>{pitch.value_preposition}</p>
-              </div>
-              <div className="pitch-content">
-                <div className="flex-row1">
-                  <h4>The Evidence</h4>
-                </div>
-                <p>{pitch.evidence_text}</p>
-              </div>
-              <div className="pitch-content">
-                <div className="flex-row1">
-                  <h4>The Differentiator</h4>
-                </div>
-                <p>{pitch.pitch_differentiator}</p>
-              </div>
-              <div className="pitch-content1">
-                <div className="flex-row1">
-                  <h4>The Call to Action</h4>
-                </div>
-                <p>{pitch.pitch_call_to_action}</p>
-              </div>
-            </>
-          )}
+            <div className="icn">
+              <FaPlay />
+            </div>
+            <div className="icn">
+              <img src={forward} alt="reverse" />
+            </div>
+          </div>
+          <div className="btn-act" onClick={() => setStatus("Not Recording")}>
+            Pitch Again
+          </div>
         </div>
-        <Actions
-          status={status}
-          startRecording={startRecording}
-          stopRecording={stopRecording}
-          sendRecording={handleUpload}
-          audioChunks={audioChunks}
-          audioUrl={audioUrl}
-          playRecording={playRecording}
-          pitch={pitch}
-          playPitch={playPitch}
-        />
-      </section>
+      </div>
+
+      {/* Additional pitch content */}
+      <div className="pitch-content">
+        <div className="flex-row1">
+          <h4>The Hook</h4>
+        </div>
+        <p>{pitch.pitch_hook}</p>
+      </div>
+      <div className="pitch-content">
+        <div className="flex-row1">
+          <h4>The Value Proposition</h4>
+        </div>
+        <p>{pitch.value_preposition}</p>
+      </div>
+      <div className="pitch-content">
+        <div className="flex-row1">
+          <h4>The Evidence</h4>
+        </div>
+        <p>{pitch.evidence_text}</p>
+      </div>
+      <div className="pitch-content">
+        <div className="flex-row1">
+          <h4>The Differentiator</h4>
+        </div>
+        <p>{pitch.pitch_differentiator}</p>
+      </div>
+      <div className="pitch-content1">
+        <div className="flex-row1">
+          <h4>The Call to Action</h4>
+        </div>
+        <p>{pitch.pitch_call_to_action}</p>
+      </div>
+
+      <Actions
+        status={status}
+        startRecording={startRecording}
+        stopRecording={stopRecording}
+        sendRecording={handleUpload}
+        audioChunks={audioChunks}
+        audioUrl={audioUrl}
+        playRecording={playRecording}
+        playPitch={playPitch}
+      />
     </div>
+  </section>
+</div>
+
   );
 };
 

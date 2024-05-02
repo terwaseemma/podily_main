@@ -279,12 +279,18 @@ const Record = () => {
           <p>{pitch.pitch_title}</p>
         </div>
         <div className="practice-holder">
-          {status === 'analyzed' ? (
+          {status === 'analyzed' && analysisResult && Object.keys(analysisResult).length > 0 && (
             <div className="analysis">
               <div className="display">
               <p>Here's the analysis of your pitch</p>
 
-              {analysisResult.content.content}
+                {Object.entries(analysisResult).map(([aspect, data]) => (
+                  <div key={aspect}>
+                      <h3>{aspect}</h3>
+                      <p>Score: {data.score}</p>
+                      <p>More details: {data.more_details}</p>
+                  </div>
+                ))}
               </div>
               
               
@@ -315,7 +321,8 @@ const Record = () => {
                 </div>
               </div>
             </div>
-          ) : (
+
+          )} : (
             <>
               <p>Kindly note that your pitch must have elements of each segment. You can edit the text to suit yours.</p>
               <div className="pitch-content">
@@ -349,7 +356,7 @@ const Record = () => {
                 <p>{pitch.pitch_call_to_action}</p>
               </div>
             </>
-          )}
+          )
         </div>
         <Actions
           status={status}

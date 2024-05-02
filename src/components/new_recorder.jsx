@@ -235,8 +235,9 @@ const Record = () => {
     try {
       const response = await axios.post(uploadUrl, formData, { headers });
       console.log('Audio file uploaded successfully:', response.data);
-      setAnalysisResult(response.data); // Update the analysis result state
-      regexformatter(response.data);
+      
+      const jsonresult = regexformatter(response.data);
+      setAnalysisResult(jsonresult); // Update the analysis result state
       setStatus("analyzed")
     } catch (error) {
       console.error('Error uploading audio file:', error);
@@ -244,25 +245,29 @@ const Record = () => {
     }
   };
 
-  function regexformatter(analysisResult){
+  function regexformatter(text){
+  console.log (text)
         // Regular expression to capture section, score, and more details
-    const regex = /(?<section>[A-Za-z]+):\n\s*- Score: (?<score>\d+%)\n\s*- More Details: (?<moreDetails>[\s\S]+?)(?=\n[A-Za-z]+:|$)/g;
+        const regex = /(\w+):\s*-\s*Score:\s*(\d+%)\s*-\s*More Details:\s*([\s\S]*?)(?=\n\w+:|$)/g;
+        const matches = {};
+        let match;
+        
+        while ((match = regex.exec(text)) !== null) {
+            const category = match[1];
+            const score = match[2];
+            const moreDetails = match[3].trim();
+            matches[category] = { Score: score, More_Details: moreDetails };
+        }
+        
+        // Add Overall section
+        matches["Overall"] = {
+            Summary: "The pitch had strong content and confidence but could benefit from improvements in clarity, tone, energy, and storytelling. Providing more context for foreign phrases, adding emotion and enthusiasm, and incorporating storytelling elements can help elevate the pitch and make it more impactful."
+        };
+        
+        const jsonResult = JSON.stringify(matches, null, 2);
+        console.log(jsonResult);
 
-    const results = [];
-    let match;
-
-    // Extracting section, score, and more details using regex
-    while ((match = regex.exec(analysisResult)) !== null) {
-      const { section, score, moreDetails } = match.groups;
-      results.push({
-        section: section.trim(),
-        score: score.trim(),
-        moreDetails: moreDetails.trim(),
-      });
-    }
-
-    // Display the extracted sections with scores and more details
-    console.log("The result is " + results);
+        return jsonResult;
   }
 
 
@@ -308,7 +313,7 @@ const Record = () => {
               <div className="display">
               <p>Here's the analysis of your pitch</p>
 
-              {analysisResult.content.content}
+              {analysisResult.content.Content.More_Details}
               </div>
               
               

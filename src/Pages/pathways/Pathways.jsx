@@ -12,6 +12,8 @@ import { NavLink } from 'react-router-dom'
 
 const Pathways = () => {
 
+  const images = ["https://firebasestorage.googleapis.com/v0/b/podily-1.appspot.com/o/Podily%20Pitch%20Files%2FStartup%20Pitch.png?alt=media&token=c3ea1c5a-d80f-43ec-8e7a-34e9587cca1b", "https://firebasestorage.googleapis.com/v0/b/podily-1.appspot.com/o/Podily%20Pitch%20Files%2FSales.png?alt=media&token=4690bf0c-2c3c-4893-bb18-0a89b97c2387", "https://firebasestorage.googleapis.com/v0/b/podily-1.appspot.com/o/Podily%20Pitch%20Files%2FNetworking.png?alt=media&token=5c55680f-4663-46c7-8841-3c6a5d60b736", "https://firebasestorage.googleapis.com/v0/b/podily-1.appspot.com/o/Podily%20Pitch%20Files%2FTech%20Solution%20Pitch.png?alt=media&token=af0c55b7-489c-4d2f-ab90-c36e5ddbd96e", "https://firebasestorage.googleapis.com/v0/b/podily-1.appspot.com/o/Podily%20Pitch%20Files%2FPersonal%20Branding.png?alt=media&token=cfd01fda-86b4-48fe-8ba0-c85dacd0e71b", "https://firebasestorage.googleapis.com/v0/b/podily-1.appspot.com/o/Podily%20Pitch%20Files%2FSkin%20care%20Product%20Launch%20Pitch.png?alt=media&token=26595e1d-1d76-4e7d-9632-833dfdf0f34f"]
+
   const [pathways, setPathways] = useState([
     {
       id: 1,
@@ -88,9 +90,9 @@ useEffect(() => {
       <Header value="library"/>
       <section className='pathways'>
         <div className='pathway-list'>
-          {pathways.map((pathway) => (
+          {pathways.map((pathway, index) => (
             <NavLink to={`/practice/${pathway.id}`} className='pathway' key={pathway.id}>
-              <img src={pathway.pitch_image_url} alt={pathway.title} />
+              <img src={images[index]} alt={pathway.title} />
               <div className='flex-row-space pathway-info'>
                 <div className="flex-column2">
                 <h2>{pathway.pitch_title}</h2>

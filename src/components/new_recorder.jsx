@@ -157,7 +157,29 @@ const Record = () => {
   }, [pitchId, token]); 
 
   
+  // Function to extract JSON content between curly brackets using regex
+  const extractJsonContent = (text) => {
+    // Regex pattern to match content within outermost curly brackets
+    const regex = /\{.*\}/;
+    const match = text.match(regex); // Find the first match
 
+    if (match && match.length > 0) {
+      const jsonString = match[0]; // Get the JSON-like content
+      try {
+        return JSON.parse(jsonString); // Parse into a JavaScript object
+      } catch (error) {
+        console.error("Failed to parse JSON:", error);
+      }
+    }
+    return null; // Return null if no match or parsing error
+  };
+
+  const PitchAnalysis = ({ responseText }) => {
+    const analysis = extractJsonContent(responseText);
+  
+    if (!analysis) {
+      return <div>No analysis data found</div>;
+    }}
 
   const [isRecording, setIsRecording] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null); // New state for analysis result
@@ -284,7 +306,15 @@ const Record = () => {
               <div className="display">
               <p>Here's the analysis of your pitch</p>
 
-              {analysisResult.content.content}
+              <ul>
+                <li><strong>Content:</strong> {analysis.content.more_details}</li>
+                <li><strong>Clarity:</strong> {analysis.clarity.more_details}</li>
+                <li><strong>Confidence:</strong> {analysis.confidence.more_details}</li>
+                <li><strong>Tone:</strong> {analysis.tone.more_details}</li>
+                <li><strong>Energy:</strong> {analysis.energy.more_details}</li>
+                <li><strong>Storytelling:</strong> {analysis.storytelling.more_details}</li>
+                <li><strong>Overall Summary:</strong> {analysis.overall.summary}</li>
+              </ul>
               </div>
               
               

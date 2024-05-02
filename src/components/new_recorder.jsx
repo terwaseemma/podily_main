@@ -236,6 +236,7 @@ const Record = () => {
       const response = await axios.post(uploadUrl, formData, { headers });
       console.log('Audio file uploaded successfully:', response.data);
       setAnalysisResult(response.data); // Update the analysis result state
+      regexformatter(response.data);
       setStatus("analyzed")
     } catch (error) {
       console.error('Error uploading audio file:', error);
@@ -243,7 +244,7 @@ const Record = () => {
     }
   };
 
-  const regexformatter = () => {
+  function regexformatter(analysisResult){
         // Regular expression to capture section, score, and more details
     const regex = /(?<section>[A-Za-z]+):\n\s*- Score: (?<score>\d+%)\n\s*- More Details: (?<moreDetails>[\s\S]+?)(?=\n[A-Za-z]+:|$)/g;
 

@@ -284,7 +284,7 @@ const Record = () => {
               <div className="display">
               <p>Here's the analysis of your pitch</p>
 
-              {analysisResult.latest_message.content}
+              {analysisResult.content.content.Clarity}
               </div>
               
               

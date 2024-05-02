@@ -157,32 +157,26 @@ const Record = () => {
   }, [pitchId, token]); 
 
   
-  // Function to extract JSON content between curly brackets using regex
-  const extractJsonContent = (text) => {
-    try {
-      // Regular expression to find content inside outermost curly brackets
-      const regex = /\{.*\}/s; // 's' flag for matching across multiple lines
-      const match = text.match(regex); // Find the first match
-  
-      if (match && match.length > 0) {
-        const jsonString = match[0]; // Extracted JSON-like content
-        const parsedJson = JSON.parse(jsonString); // Parse into a JavaScript object
-        return parsedJson; // Return the parsed JSON object
-      } else {
-        throw new Error("No JSON-like content found in the given text");
-      }
-    } catch (error) {
-      console.error("Error parsing JSON:", error); // Handle parsing errors
-      return null; // Return null in case of errors
-    }
-  }
+// Regular expression to capture section, score, and more details
+const regex = /(?<section>[A-Za-z]+):\n\s*- Score: (?<score>\d+%)\n\s*- More Details: (?<moreDetails>[\s\S]+?)(?=\n[A-Za-z]+:|$)/g;
 
-  const PitchAnalysis = ({ responseText }) => {
-    const analysis = extractJsonContent(responseText);
-  
-    if (!analysis) {
-      return <div>No analysis data found</div>;
-    }}
+const results = [];
+let match;
+
+// Extracting section, score, and more details using regex
+while ((match = regex.exec(analysisResult)) !== null) {
+  const { section, score, moreDetails } = match.groups;
+  results.push({
+    section: section.trim(),
+    score: score.trim(),
+    moreDetails: moreDetails.trim(),
+  });
+}
+
+// Display the extracted sections with scores and more details
+console.log(results);
+
+
 
   const [isRecording, setIsRecording] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null); // New state for analysis result
@@ -258,12 +252,11 @@ const Record = () => {
     try {
       const response = await axios.post(uploadUrl, formData, { headers });
       console.log('Audio file uploaded successfully:', response.data);
-      console.log('parsed data', extractJsonContent(response.data.latest_message.content))
-      setAnalysisResult(extractJsonContent(response.data.latest_message.content)); // Update the analysis result state
+      setAnalysisResult(response.data); // Update the analysis result state
       setStatus("analyzed")
     } catch (error) {
       console.error('Error uploading audio file:', error);
-      setAnalysisResult(null); // Reet the analysis result state
+      setAnalysisResult(null); // Reset the analysis result state
     }
   };
 
@@ -310,15 +303,7 @@ const Record = () => {
               <div className="display">
               <p>Here's the analysis of your pitch</p>
 
-              <ul>
-                <li><strong>Content:</strong> {analysisResult.latest_message.content.content.more_details}</li>
-                <li><strong>Clarity:</strong> {analysisResult.latest_message.content.clarity.more_details}</li>
-                <li><strong>Confidence:</strong> {analysisResult.latest_message.confidence.more_details}</li>
-                <li><strong>Tone:</strong> {analysisResult.latest_message.content.tone.more_details}</li>
-                <li><strong>Energy:</strong> {analysisResult.latest_message.content.energy.more_details}</li>
-                <li><strong>Storytelling:</strong> {analysisResult.latest_message.content.storytelling.more_details}</li>
-                {/* <li><strong>Overall Summary:</strong> {response.data.latest_message.content}</li> */}
-              </ul>
+              {analysisResult.content.content}
               </div>
               
               

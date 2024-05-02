@@ -262,7 +262,7 @@ const Record = () => {
     }
 
     // Display the extracted sections with scores and more details
-    console.log(results);
+    console.log("The result is " + results);
   }
 
 

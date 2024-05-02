@@ -311,13 +311,13 @@ const Record = () => {
               <p>Here's the analysis of your pitch</p>
 
               <ul>
-                <li><strong>Content:</strong> {analysis.content.more_details}</li>
-                <li><strong>Clarity:</strong> {analysis.clarity.more_details}</li>
-                <li><strong>Confidence:</strong> {analysis.confidence.more_details}</li>
-                <li><strong>Tone:</strong> {analysis.tone.more_details}</li>
-                <li><strong>Energy:</strong> {analysis.energy.more_details}</li>
-                <li><strong>Storytelling:</strong> {analysis.storytelling.more_details}</li>
-                <li><strong>Overall Summary:</strong> {analysis.overall.summary}</li>
+                <li><strong>Content:</strong> {response.data.latest_message.content.content.more_details}</li>
+                <li><strong>Clarity:</strong> {response.data.latest_message.content.clarity.more_details}</li>
+                <li><strong>Confidence:</strong> {response.data.latest_message.confidence.more_details}</li>
+                <li><strong>Tone:</strong> {response.data.latest_message.content.tone.more_details}</li>
+                <li><strong>Energy:</strong> {response.data.latest_message.content.energy.more_details}</li>
+                <li><strong>Storytelling:</strong> {response.data.latest_message.content.storytelling.more_details}</li>
+                {/* <li><strong>Overall Summary:</strong> {response.data.latest_message.content}</li> */}
               </ul>
               </div>
               

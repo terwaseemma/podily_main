@@ -157,24 +157,7 @@ const Record = () => {
   }, [pitchId, token]); 
 
   
-// Regular expression to capture section, score, and more details
-const regex = /(?<section>[A-Za-z]+):\n\s*- Score: (?<score>\d+%)\n\s*- More Details: (?<moreDetails>[\s\S]+?)(?=\n[A-Za-z]+:|$)/g;
 
-const results = [];
-let match;
-
-// Extracting section, score, and more details using regex
-while ((match = regex.exec(analysisResult)) !== null) {
-  const { section, score, moreDetails } = match.groups;
-  results.push({
-    section: section.trim(),
-    score: score.trim(),
-    moreDetails: moreDetails.trim(),
-  });
-}
-
-// Display the extracted sections with scores and more details
-console.log(results);
 
 
 
@@ -259,6 +242,27 @@ console.log(results);
       setAnalysisResult(null); // Reset the analysis result state
     }
   };
+
+  const regexformatter = () => {
+        // Regular expression to capture section, score, and more details
+    const regex = /(?<section>[A-Za-z]+):\n\s*- Score: (?<score>\d+%)\n\s*- More Details: (?<moreDetails>[\s\S]+?)(?=\n[A-Za-z]+:|$)/g;
+
+    const results = [];
+    let match;
+
+    // Extracting section, score, and more details using regex
+    while ((match = regex.exec(analysisResult)) !== null) {
+      const { section, score, moreDetails } = match.groups;
+      results.push({
+        section: section.trim(),
+        score: score.trim(),
+        moreDetails: moreDetails.trim(),
+      });
+    }
+
+    // Display the extracted sections with scores and more details
+    console.log(results);
+  }
 
 
   const playRecording = () => {

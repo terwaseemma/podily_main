@@ -159,20 +159,23 @@ const Record = () => {
   
   // Function to extract JSON content between curly brackets using regex
   const extractJsonContent = (text) => {
-    // Regex pattern to match content within outermost curly brackets
-    const regex = /\{.*\}/;
-    const match = text.match(regex); // Find the first match
-
-    if (match && match.length > 0) {
-      const jsonString = match[0]; // Get the JSON-like content
-      try {
-        return JSON.parse(jsonString); // Parse into a JavaScript object
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
+    try {
+      // Regular expression to find content inside outermost curly brackets
+      const regex = /\{.*\}/s; // 's' flag for matching across multiple lines
+      const match = text.match(regex); // Find the first match
+  
+      if (match && match.length > 0) {
+        const jsonString = match[0]; // Extracted JSON-like content
+        const parsedJson = JSON.parse(jsonString); // Parse into a JavaScript object
+        return parsedJson; // Return the parsed JSON object
+      } else {
+        throw new Error("No JSON-like content found in the given text");
       }
+    } catch (error) {
+      console.error("Error parsing JSON:", error); // Handle parsing errors
+      return null; // Return null in case of errors
     }
-    return null; // Return null if no match or parsing error
-  };
+  }
 
   const PitchAnalysis = ({ responseText }) => {
     const analysis = extractJsonContent(responseText);
@@ -255,11 +258,12 @@ const Record = () => {
     try {
       const response = await axios.post(uploadUrl, formData, { headers });
       console.log('Audio file uploaded successfully:', response.data);
-      setAnalysisResult(response.data); // Update the analysis result state
+      console.log('parsed data', extractJsonContent(response.data.latest_message.content))
+      setAnalysisResult(extractJsonContent(response.data.latest_message.content)); // Update the analysis result state
       setStatus("analyzed")
     } catch (error) {
       console.error('Error uploading audio file:', error);
-      setAnalysisResult(null); // Reset the analysis result state
+      setAnalysisResult(null); // Reet the analysis result state
     }
   };
 

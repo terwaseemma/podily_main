@@ -24,6 +24,7 @@ const Signup = () => {
             .then(res => {
                 localStorage.setItem('token', res.data.token);
                 navigate('/onboarding-one');
+                console.log(token)
             })
             .catch(error => {
                 console.error("Authentication error: ", error);

@@ -313,7 +313,7 @@ const Record = () => {
             <div className="analysis">
               <div className="display">
               <h2>Here's the analysis of your pitch</h2>
-
+              {analysisResult.Hello.More_Details}
               <ul>
                 <li><strong>Content:</strong>{analysisResult.Content.Score}{analysisResult.Content.More_Details}</li>
                 <li><strong>Clarity:</strong>{analysisResult.Clarity.Score}{analysisResult.Clarity.More_Details}</li>

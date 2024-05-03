@@ -314,20 +314,26 @@ const Record = () => {
               <div className="display">
               <p>Here's the analysis of your pitch</p>
 
-              {analysisResult.Content.More_Details}
+              <ul>
+                <li>{analysisResult.Content.Score}</li>
+                <li>{analysisResult.Content.More_Details}</li>
+                <li>{analysisResult.Clarity.Score}</li>
+                <li>{analysisResult.Clarity.More_Details}</li>
+                <li>{analysisResult.Confidence.Score}</li>
+                <li>{analysisResult.Confidence.More_Details}</li>
+                <li>{analysisResult.Tone.Score}</li>
+                <li>{analysisResult.Tone.More_Details}</li>
+                <li>{analysisResult.Energy.Score}</li>
+                <li>{analysisResult.Energy.More_Details}</li>
+                <li>{analysisResult.Storytelling.Score}</li>
+                <li>{analysisResult.Storytelling.More_Details}</li>
+                <li>{analysisResult.Overall.Summary}</li>
+              </ul>
+              
+              
+              {/* {analysisResult.Content.More_Details} */}
               </div>
-              
-              
-              {/* <ul>
-                <li>{analysisResult.latest_message.content.Hello.Intro}</li>
-                <li>{analysisResult.latest_message.content.content.more_details}</li>
-                <li>{analysisResult.latest_message.content.clarity.more_details}</li>
-                <li>{analysisResult.latest_message.content.confidence.more_details}</li>
-                <li>{analysisResult.latest_message.content.tone.more_details}</li>
-                <li>{analysisResult.latest_message.content.energy.more_details}</li>
-                <li>{analysisResult.latest_message.content.storytelling.more_details}</li>
-                <li>{analysisResult.latest_message.content.overall.summary}</li>
-              </ul> */}
+            
               <div className="actions-div">
                 <div className="script-aud">
                   <div className="icn">

@@ -23,8 +23,9 @@ const Signup = () => {
         axios.post('https://podily-api-ymrsk.ondigitalocean.app/speak_assistant/register/', { firstName, lastName, username, password }) // Removed extra comma
             .then(res => {
                 localStorage.setItem('token', res.data.token);
+                console.log(res.data.token);
                 navigate('/onboarding-one');
-                console.log(token)
+                
             })
             .catch(error => {
                 console.error("Authentication error: ", error);

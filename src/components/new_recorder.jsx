@@ -245,7 +245,8 @@ const Record = () => {
     }
   };
 
-  function regexformatter(text){
+  function regexformatter(res){
+    const text = res.replace(/#/g, "");
   console.log (text)
         // Regular expression to capture section, score, and more details
         const regex = /(\w+):\s*-\s*Score:\s*(\d+%)\s*-\s*More Details:\s*([\s\S]*?)(?=\n\w+:|$)/g;

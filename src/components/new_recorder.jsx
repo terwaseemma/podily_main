@@ -265,8 +265,8 @@ const Record = () => {
             Summary: "The pitch had strong content and confidence but could benefit from improvements in clarity, tone, energy, and storytelling. Providing more context for foreign phrases, adding emotion and enthusiasm, and incorporating storytelling elements can help elevate the pitch and make it more impactful."
         };
         
-        const jsonResult = JSON.stringify(matches, null, 2);
-        console.log(jsonResult);
+        const jsonResult = JSON.parse(JSON.stringify(matches, null, 2));
+        console.log(jsonResult.Content.More_Details);
 
         return jsonResult;
   }

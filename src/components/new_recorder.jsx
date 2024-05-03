@@ -312,21 +312,15 @@ const Record = () => {
           {status === 'analyzed' ? (
             <div className="analysis">
               <div className="display">
-              <p>Here's the analysis of your pitch</p>
+              <h2>Here's the analysis of your pitch</h2>
 
               <ul>
-                <li>{analysisResult.Content.Score}</li>
-                <li>{analysisResult.Content.More_Details}</li>
-                <li>{analysisResult.Clarity.Score}</li>
-                <li>{analysisResult.Clarity.More_Details}</li>
-                <li>{analysisResult.Confidence.Score}</li>
-                <li>{analysisResult.Confidence.More_Details}</li>
-                <li>{analysisResult.Tone.Score}</li>
-                <li>{analysisResult.Tone.More_Details}</li>
-                <li>{analysisResult.Energy.Score}</li>
-                <li>{analysisResult.Energy.More_Details}</li>
-                <li>{analysisResult.Storytelling.Score}</li>
-                <li>{analysisResult.Storytelling.More_Details}</li>
+                <li><strong>Content:</strong>{analysisResult.Content.Score}{analysisResult.Content.More_Details}</li>
+                <li><strong>Clarity:</strong>{analysisResult.Clarity.Score}{analysisResult.Clarity.More_Details}</li>
+                <li><strong>Confidence:</strong>{analysisResult.Confidence.Score}{analysisResult.Confidence.More_Details}</li>
+                <li><strong>Tone:</strong>{analysisResult.Tone.Score}{analysisResult.Tone.More_Details}</li>
+                <li><strong>Energy:</strong>{analysisResult.Energy.Score}{analysisResult.Energy.More_Details}</li>
+                <li><strong>Storytelling:</strong>{analysisResult.Storytelling.Score}{analysisResult.Storytelling.More_Details}</li>
                 <li>{analysisResult.Overall.Summary}</li>
               </ul>
               

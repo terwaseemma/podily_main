@@ -321,7 +321,7 @@ const Record = () => {
                 <li><strong>Tone:</strong>{analysisResult.Tone.Score}{analysisResult.Tone.More_Details}</li>
                 <li><strong>Energy:</strong>{analysisResult.Energy.Score}{analysisResult.Energy.More_Details}</li>
                 <li><strong>Storytelling:</strong>{analysisResult.Storytelling.Score}{analysisResult.Storytelling.More_Details}</li>
-                <li>{analysisResult.Overall.Summary}</li>
+                <li><strong>Overall Summary:</strong>{analysisResult.Overall.Summary}</li>
               </ul>
               
               

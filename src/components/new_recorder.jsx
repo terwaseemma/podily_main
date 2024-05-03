@@ -312,21 +312,58 @@ const Record = () => {
           {status === 'analyzed' ? (
             <div className="analysis">
               <div className="display">
-              <h2>Here's the analysis of your pitch</h2>
-              {analysisResult.Hello.More_Details}
-              <ul>
-                <li><strong>Content:</strong>{analysisResult.Content.Score}{analysisResult.Content.More_Details}</li>
-                <li><strong>Clarity:</strong>{analysisResult.Clarity.Score}{analysisResult.Clarity.More_Details}</li>
-                <li><strong>Confidence:</strong>{analysisResult.Confidence.Score}{analysisResult.Confidence.More_Details}</li>
-                <li><strong>Tone:</strong>{analysisResult.Tone.Score}{analysisResult.Tone.More_Details}</li>
-                <li><strong>Energy:</strong>{analysisResult.Energy.Score}{analysisResult.Energy.More_Details}</li>
-                <li><strong>Storytelling:</strong>{analysisResult.Storytelling.Score}{analysisResult.Storytelling.More_Details}</li>
-                <li><strong>Overall Summary:</strong>{analysisResult.Overall.Summary}</li>
-              </ul>
-              
-              
-              {/* {analysisResult.Content.More_Details} */}
-              </div>
+                
+                <div className="pitch-content">
+                    <div className="flex-row1">
+                      <h2>Here's the analysis of your pitch</h2>
+                    </div>
+                    {analysisResult.Hello.More_Details}
+                  </div>
+                  <div className="pitch-contents-container">
+                    <div className="pitch-content">
+                      <div className="flex-row1">
+                        <strong>Content: {analysisResult.Content.Score}</strong>
+                      </div>
+                      {analysisResult.Content.More_Details}
+                    </div>
+                    <div className="pitch-content">
+                      <div className="flex-row1">
+                        <strong>Clarity: {analysisResult.Clarity.Score}</strong>
+                      </div>
+                      {analysisResult.Clarity.More_Details}
+                    </div>
+                    <div className="pitch-content">
+                      <div className="flex-row1">
+                        <strong>Confidence: {analysisResult.Confidence.Score}</strong>
+                      </div>
+                      {analysisResult.Confidence.More_Details}
+                    </div>
+                    <div className="pitch-content">
+                      <div className="flex-row1">
+                        <strong>Tone: {analysisResult.Tone.Score}</strong>
+                      </div>
+                      {analysisResult.Tone.More_Details}
+                    </div>
+                    <div className="pitch-content">
+                      <div className="flex-row1">
+                        <strong>Energy: {analysisResult.Energy.Score}</strong>
+                      </div>
+                      {analysisResult.Energy.More_Details}
+                    </div>
+                    <div className="pitch-content">
+                      <div className="flex-row1">
+                        <strong>Storytelling: {analysisResult.Storytelling.Score}</strong>
+                      </div>
+                      {analysisResult.Storytelling.More_Details}
+                    </div>
+                    <div className="pitch-content">
+                      <div className="flex-row1">
+                        <strong>Overall Summary:</strong>
+                      </div>
+                      {analysisResult.Overall.Summary}
+                    </div>
+                  </div>
+                </div>
             
               <div className="actions-div">
                 <div className="script-aud">
